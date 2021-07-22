@@ -1,0 +1,198 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "TPP - Banking API"
+  },
+  "servers": [
+    {
+      "url": "https://banking-api-sample.com"
+    }
+  ],
+  "paths": {
+    "/api/transactions": {
+      "get": {
+        "tags": [
+          "Transactions"
+        ],
+        "summary": "Retrieve transactions",
+        "parameters": [
+          {
+            "name":"lastTransactionId",
+            "in":"query",
+            "description":"Latest Transaction ID to retrieve data after this one.",
+            "required":false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "11"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Transactions"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TechnicalFailure"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/balances": {
+      "get": {
+        "tags": [
+          "Balances"
+        ],
+        "parameters": [
+          {
+            "name":"lastDate",
+            "in":"query",
+            "description":"Date in ISO format, to get balances after this date.",
+            "required":false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Balances"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TechnicalFailure"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CounterPartName": {
+        "enum": [
+          "Counterpart Name_1",
+          "Counterpart Name_2",
+          "Counterpart Name_3",
+          "Counterpart Name_4",
+          "Counterpart Name_5",
+          "Counterpart Name_6",
+          "Counterpart Name_7",
+          "Counterpart Name_8",
+          "Counterpart Name_9",
+          "Counterpart Name_10",
+          "Counterpart Name_11"
+        ],
+        "type": "string"
+      },
+      "Balance": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Transaction": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "amount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "counterpart_name": {
+            "$ref": "#/components/schemas/CounterPartName"
+          },
+          "counterpart_iban": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "Balances": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Balance"
+        },
+        "example": [
+          {
+            "amount": 26148,
+            "date": "2019-10-05T14:48:00.000Z"
+          },
+          {
+            "amount": 41589,
+            "date": "2021-10-05T14:48:00.000Z"
+          }
+        ]
+      },
+      "Transactions": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Transaction"
+        }
+      },
+      "TechnicalFailure": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "required": true,
+            "description": "Error status received from target TPP",
+            "example": "technicalFailure"
+          },
+          "message": {
+            "type": "string",
+            "required": true,
+            "description": "Error message received from target TPP",
+            "example": "The bank failed to return the transactions"
+          }
+        },
+        "example": {
+          "status": "technicalFailure",
+          "message": "The bank failed to return the transactions"
+        }
+      }
+    }
+  }
+}
