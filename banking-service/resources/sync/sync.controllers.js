@@ -12,11 +12,10 @@ const { Transaction } = require('../transaction/transaction.model.js')
  */
 async function launchSync (req, res) {
     const { operations } = req;
-    const apiCalls = []
     let sync
 
     try {
-      operations.map(op=> apiCalls.push(createAPICall(op)));
+      const apiCalls = operations.map(op=> (createAPICall(op)));
 
       // retrieve the necessary datas
       const data = await Promise.all(apiCalls)
@@ -29,7 +28,7 @@ async function launchSync (req, res) {
           date: new Date()
         }
 
-        await crudControllers(Sync).createOne(req, res)
+        await crudControllers(Sync).createOne(req)
 
         return res.status(500).send({ status: 'failure', message: `Oops, we're sorry. Fatal error occured while retrieving the ${operationType} data from TPP!` })
       }
@@ -56,7 +55,7 @@ async function launchSync (req, res) {
         status: 'success',
         date: Date.now()
       }
-      sync = await crudControllers(Sync).createOne(req, res)
+      sync = await crudControllers(Sync).createOne(req)
 
     } catch(error) {
       console.error(`Synchronization Error: ${error.message}`)

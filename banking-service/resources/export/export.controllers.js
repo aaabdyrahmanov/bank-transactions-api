@@ -37,20 +37,19 @@ async function exportTransactions (req, res, configs=config.transaction) {
     filename: 'transaction.csv'
   }
 
-  console.log(configs)
-    try {
-        const { data } = await TransactionController.getAll(req, res)
+  try {
+      const { data } = await TransactionController.getAll(req, res)
 
-        const csv = convertResource(fields, data);
+      const csv = convertResource(fields, data);
 
-        res.header('Content-Type', 'text/csv');
-        res.attachment(filename);
+      res.header('Content-Type', 'text/csv');
+      res.attachment(filename);
 
-        return res.status(200).send(csv);
-      } catch(error) {
-      console.error(`Export Error: ${error}`)
-      return res.status(400)
-    }
+      return res.status(200).send(csv);
+    } catch(error) {
+    console.error(`Export Error: ${error}`)
+    return res.status(400)
+  }
 }
 
 async function exportBalances (req, res) {

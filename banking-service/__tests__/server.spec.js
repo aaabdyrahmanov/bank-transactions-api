@@ -9,7 +9,7 @@ describe('export controllers', () => {
     let response = await request(server).get('/v1/launch')
     expect(response.statusCode).toBe(404)
 
-    response = await request(server).get('/v1/balance')
+    response = await request(server).get('/v1/balances')
     expect(response.statusCode).toBe(404)
 
     response = await request(server).get('/api')

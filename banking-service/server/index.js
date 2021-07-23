@@ -34,14 +34,14 @@ app.use(urlencoded({ extended: false }));
 // HTTP request logger middleware
 app.use(logger("dev"));
 
-// compacting requests using GZIP middleware
+// compacting responses using GZIP middleware
 app.use(compression())
 
 // // attach routes
-app.use('/v1/balances', balanceRouter)
+app.use('/v1/balance', balanceRouter)
 app.use('/v1/export', exportRouter)
 app.use('/v1/sync', syncRouter)
-app.use('/v1/transactions', transactionRouter)
+app.use('/v1/transaction', transactionRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

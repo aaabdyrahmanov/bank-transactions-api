@@ -34,7 +34,7 @@ describe('sync controllers', () => {
 
   test('Sync #2 - should download transactions successfully', async () => {
     // launch sync
-    const res = await api.get(`/v1/sync/launch`)
+    const res = await api.get('/v1/sync/launch')
 
     expect(res.statusCode).toEqual(201)
   })
@@ -43,7 +43,7 @@ describe('sync controllers', () => {
     let lastTransactionId = mongoose.Types.ObjectId()
 
     // launch sync
-    const res = await api.get(`/v1/sync/launch?lastTransactionId=?${lastTransactionId}`)
+    const res = await api.get('/v1/sync/launch?lastTransactionId=?${lastTransactionId}')
 
     expect(res.statusCode).toEqual(201)
   })
@@ -52,7 +52,7 @@ describe('sync controllers', () => {
     const lastDate = new Date()
 
     // launch sync
-    const res = await api.get(`/v1/sync/launch?lastDate=${lastDate}`)
+    const res = await api.get('/v1/sync/launch?lastDate=${lastDate}')
 
     expect(res.statusCode).toEqual(400)
   })
@@ -60,7 +60,7 @@ describe('sync controllers', () => {
   test('Sync #5 - should fail with invalid ISO date format', async () => {
     const lastDate = "9999-88-77T66:55:44.000Z"
 
-    const res = await api.get(`/v1/sync/launch?lastDate=${lastDate}`)
+    const res = await api.get('/v1/sync/launch?lastDate=${lastDate}')
 
     expect(res.statusCode).toEqual(400)
   })
@@ -69,13 +69,13 @@ describe('sync controllers', () => {
     let lastTransactionId = mongoose.Types.ObjectId()
     const lastDate = "2021-10-05T14:48:00.000Z"
 
-    const res = await api.get(`/v1/sync/launch?lastTransactionId=?${lastTransactionId}?lastDate=${lastDate}`)
+    const res = await api.get('/v1/sync/launch?lastTransactionId=?${lastTransactionId}?lastDate=${lastDate}')
 
     expect(res.statusCode).toEqual(201)
   })
 
   test('Sync #7 - should delete the data', async () => {
-    const res = await api.delete(`/v1/sync`)
+    const res = await api.delete('/v1/sync')
 
     expect(res.statusCode).toEqual(404)
   })

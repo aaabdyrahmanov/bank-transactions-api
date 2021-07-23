@@ -2,7 +2,7 @@ const router = require('express').Router()
 const controllers = require('./balance.controllers.js')
 
 /**
-    /v1/balances
+    /v1/balance
  */
 router
     .route('/')

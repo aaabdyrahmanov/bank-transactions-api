@@ -1,4 +1,4 @@
-const createOne = model => async (req, res) => {
+const createOne = model => async (req) => {
   const { data } = req.body
 
   try {
@@ -7,7 +7,7 @@ const createOne = model => async (req, res) => {
     return { status: 'success', data: doc }
   } catch (err) {
     console.error(err)
-    return { status: 'failure', message: err }
+    return res.status(400).json({ status: 'failure', message: err.message })
   }
 }
 
@@ -18,7 +18,7 @@ const createMany = model => async (data) => {
     return { status: 'success', data: doc }
   } catch (err) {
     console.error(err)
-    return { status: 'failure', message: err }
+    return res.status(400).json({ status: 'failure', message: err.message })
   }
 }
 
@@ -77,7 +77,7 @@ const getAll = model => async (req, res) => {
     return { total: docs.length, data: docs }
   } catch (err) {
     console.error(err)
-    return { status: "failure", message: err }
+    return res.status(400).json({ status: 'failure', message: err.message })
   }
 }
 

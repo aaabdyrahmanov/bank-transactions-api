@@ -2,7 +2,7 @@ const router = require('express').Router()
 const controllers = require('./transaction.controllers.js')
 
 /**
-    /v1/transactions
+    /v1/transaction
  */
 router
     .route('/')
