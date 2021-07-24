@@ -1,0 +1,38 @@
+version: "3.7"
+
+services:
+  api:
+    build: ./banking-service
+    container_name: api-server
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    networks:
+      - server-network
+    command:
+      "yarn run start"
+
+  db:
+    image: mongo:4-bionic
+    container_name: api-db
+    volumes:
+      - db-data:/data/db
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: api-db
+      MONGODB_DATA_DIR: /data/db
+      MONDODB_LOG_DIR: /dev/null
+    ports:
+      - "27017:27017"
+    networks:
+      - server-network
+
+volumes:
+  db-data:
+
+networks:
+  server-network:
+    name: app-network
+    driver: bridge
