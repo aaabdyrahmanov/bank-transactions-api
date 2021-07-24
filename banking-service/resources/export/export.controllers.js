@@ -1,51 +1,20 @@
+const fs = require('fs')
 const BalanceController = require('../balance/balance.controllers')
 const TransactionController = require('../transaction/transaction.controllers')
-const { convertResource } = require('../../utils/resourceConvertor.js') 
 
 async function exportTransactions (req, res, configs=config.transaction) {
-  const { fields, filename } = {
-    fields: [
-      {
-        label: 'Transaction Id',
-        value: '_id'
-      },
-      {
-        label: 'Transaction Id',
-        value: 'id'
-      },
-      {
-        label: 'Amount',
-        value: 'amount'
-      },
-      {
-        label: 'Counterpart Name',
-        value: 'counterpart_name'
-      },
-      {
-        label: 'Counterpart IBAN',
-        value: 'counterpart_iban'
-      },
-      {
-        label: 'Date',
-        value: 'date'
-      },
-      {
-        label: 'Retrieved Date',
-        value: 'createdAt'
-      }
-    ],
-    filename: 'transaction.csv'
-  }
-
   try {
       const { data } = await TransactionController.getAll(req, res)
 
-      const csv = convertResource(fields, data);
+      const writable = fs.createWriteStream('./transactions.csv')
 
-      res.header('Content-Type', 'text/csv');
-      res.attachment(filename);
+      writable.on('finish', () => { 
+        console.log('Transactions exporting completed!') 
+      })
+      writable.write(data.toString())
+      writable.end('Stream writing done!')
 
-      return res.status(200).send(csv);
+      return res.status(200).send({ status: 'success', message: 'Transactions data exported successfully!'});
     } catch(error) {
     console.error(`Export Error: ${error}`)
     return res.status(400)
@@ -53,37 +22,18 @@ async function exportTransactions (req, res, configs=config.transaction) {
 }
 
 async function exportBalances (req, res) {
-  const { fields, filename } = {
-      fields: [
-        {
-            label: 'Balance Id',
-            value: '_id'
-        },
-        {
-          label: 'Balance amount',
-          value: 'amount'
-        },
-        {
-          label: 'Transaction Date',
-          value: 'date'
-        },
-        {
-          label: 'Retrieved Date',
-          value: 'createdAt'
-        }
-      ],
-      filename: 'transaction.csv'
-    }
-
     try {
       const { data } = await BalanceController.getAll(req, res)
 
-      const csv = convertResource(fields, data);
+      const writable = fs.createWriteStream('./balances.csv')
 
-      res.header('Content-Type', 'text/csv');
-      res.attachment(filename);
+      writable.on('finish', () => { 
+        console.log('Balances exporting completed!') 
+      })
+      writable.write(data.toString())
+      writable.end('Stream writing done!')
 
-      return res.status(200).send(csv);
+      return res.status(200).send({ status: 'success', message: 'Balances data exported successfully!'});
     } catch(error) {
       console.error(`Export Error: ${error.message}`)
       return res.status(400)
