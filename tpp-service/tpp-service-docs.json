@@ -2,14 +2,93 @@
   "openapi": "3.0.0",
   "info": {
     "version": "1.0.0",
-    "title": "TPP - Banking API"
+    "title": "Licensed Third Party Provider - Banking API"
   },
   "servers": [
     {
-      "url": "https://banking-api-sample.com"
+      "url": "https://tpp-service-prod.us-east-1.elasticbeanstalk.com"
     }
   ],
   "paths": {
+    "/api/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Check Health",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheckSuccess"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service Unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthCheckFailure"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/documentation": {
+      "get": {
+        "tags": [
+          "Docs"
+        ],
+        "summary": "TPP Service Docs"
+      }
+    },
+    "/api/balances": {
+      "get": {
+        "tags": [
+          "Balances"
+        ],
+        "summary": "Retrieve balances",
+        "parameters": [
+          {
+            "name":"lastDate",
+            "in":"query",
+            "description":"Date in ISO format, to get balances after this date.",
+            "required":false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Balances"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TechnicalFailure"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/transactions": {
       "get": {
         "tags": [
@@ -51,65 +130,59 @@
           }
         }
       }
-    },
-    "/api/balances": {
-      "get": {
-        "tags": [
-          "Balances"
-        ],
-        "parameters": [
-          {
-            "name":"lastDate",
-            "in":"query",
-            "description":"Date in ISO format, to get balances after this date.",
-            "required":false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Balances"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TechnicalFailure"
-                }
-              }
-            }
-          }
-        }
-      }
     }
   },
   "components": {
     "schemas": {
-      "CounterPartName": {
-        "enum": [
-          "Counterpart Name_1",
-          "Counterpart Name_2",
-          "Counterpart Name_3",
-          "Counterpart Name_4",
-          "Counterpart Name_5",
-          "Counterpart Name_6",
-          "Counterpart Name_7",
-          "Counterpart Name_8",
-          "Counterpart Name_9",
-          "Counterpart Name_10",
-          "Counterpart Name_11"
-        ],
-        "type": "string"
+      "HealthCheckSuccess": {
+        "type": "object",
+        "properties": {
+          "uptime": {
+            "type": "integer",
+            "required": true,
+            "description": "Number of seconds the Node.js process is running",
+            "example": "15.63860375"
+          },
+          "message": {
+            "type": "string",
+            "required": true,
+            "description": "Current Health Status",
+            "example": "OK"
+          },
+          "timestamp": {
+            "type": "integer",
+            "required": true,
+            "description": "Current time",
+            "example": "1629222051528"
+          }
+        },
+        "example": {
+          "uptime": 15.63860375,
+          "message": "OK",
+          "timestamp": 1629222051528
+        }
+      },
+      "Balances": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Balance"
+        },
+        "example": [
+          {
+            "amount": 26148,
+            "date": "2019-10-05T14:48:00.000Z"
+          },
+          {
+            "amount": 41589,
+            "date": "2021-10-05T14:48:00.000Z"
+          }
+        ]
+      },
+      "Transactions": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Transaction"
+        }
       },
       "Balance": {
         "type": "object",
@@ -150,26 +223,41 @@
         },
         "additionalProperties": false
       },
-      "Balances": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/Balance"
-        },
-        "example": [
-          {
-            "amount": 26148,
-            "date": "2019-10-05T14:48:00.000Z"
-          },
-          {
-            "amount": 41589,
-            "date": "2021-10-05T14:48:00.000Z"
-          }
-        ]
+      "CounterPartName": {
+        "enum": [
+          "Counterpart Name_1",
+          "Counterpart Name_2",
+          "Counterpart Name_3",
+          "Counterpart Name_4",
+          "Counterpart Name_5",
+          "Counterpart Name_6",
+          "Counterpart Name_7",
+          "Counterpart Name_8",
+          "Counterpart Name_9",
+          "Counterpart Name_10",
+          "Counterpart Name_11"
+        ],
+        "type": "string"
       },
-      "Transactions": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/Transaction"
+      "HealthCheckFailure": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "required": true,
+            "description": "Error status received from server",
+            "example": "healthCheckFailure"
+          },
+          "message": {
+            "type": "string",
+            "required": true,
+            "description": "Error message received from server",
+            "example": "Sorry, something went wrong. Service Unavailable!"
+          }
+        },
+        "example": {
+          "status": "healthCheckFailure",
+          "message": "Sorry, something went wrong. Service Unavailable!"
         }
       },
       "TechnicalFailure": {
