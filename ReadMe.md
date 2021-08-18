@@ -2,7 +2,7 @@
 Synchronizes the Third-Party Provider to retrieve the user transactions/balances and save the data on MongoDB with the help of CRUD operations. Banking-service is built following the Test-Driven Approach.
 
 ## Getting Started
-Following instructions will get you a copy will get you a copy of the project up and running on your local machine for the development and testing purposes.
+Following instructions will get you a copy of the project up and running on your local machine for the development and testing purposes.
 
 ## Requirements
 Project can be executed in the following way:
