@@ -5,7 +5,11 @@
   "author": "Atamyrat Abdyrahmanov <atamyrat@abdyrahmanov.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "mocha"
+  },
+  "directories": {
+    "test": "./test"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -13,5 +17,9 @@
     "express": "^4.17.1",
     "http-errors": "^1.7.2",
     "swagger-ui-express": "^4.1.6"
+  },
+  "devDependencies": {
+    "mocha": "^9.0.3",
+    "supertest": "^6.1.6"
   }
 }
