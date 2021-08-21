@@ -1,0 +1,21 @@
+{
+  "env": {
+    "node": true,
+    "jest": true
+  },
+
+  "extends": ["airbnb", "prettier"],
+  "rules": {
+    "eqeqeq": "off",
+    "camelcase": "off",
+    "class-methods-use-this": "off",
+    "consistent-return": "off",
+    "no-console": "off",
+    "no-use-before-define": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "latest"
+    }
+  }
+}

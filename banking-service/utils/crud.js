@@ -1,106 +1,120 @@
-const createOne = model => async (req) => {
-  const { data } = req.body
+const createOne = (model) => async (req, res) => {
+  const { data } = req.body;
 
   try {
-    const doc = await model.create(data)
+    const doc = await model.create(data);
 
-    return { status: 'success', data: doc }
+    return { status: "success", data: doc };
   } catch (err) {
-    console.error(err)
-    return res.status(400).json({ status: 'failure', message: err.message })
+    console.error(err);
+    return res.status(400).json({ status: "failure", message: err.message });
   }
-}
+};
 
-const createMany = model => async (data) => {
+const createMany = (model) => async (data, res) => {
   try {
-    const doc = await model.insertMany(data)
-    
-    return { status: 'success', data: doc }
+    const doc = await model.insertMany(data);
+
+    return { status: "success", data: doc };
   } catch (err) {
-    console.error(err)
-    return res.status(400).json({ status: 'failure', message: err.message })
+    console.error(err);
+    return res.status(400).json({ status: "failure", message: err.message });
   }
-}
+};
 
 // paginated feature enabled
-const getMany = model => async (req, res) => {
-  let page = req.query.page || 1; 
+const getMany = (model) => async (req, res) => {
+  const page = req.query.page || 1;
   let pageSize = req.query.limit || 100;
-  let skip = 0 
+  let skip = 0;
+  let docs;
 
   try {
     if (pageSize) {
-      pageSize *= 1
-      skip = (page-1) * pageSize
+      pageSize *= 1;
+      skip = (page - 1) * pageSize;
     }
 
-    const docs = await model
-      .aggregate([
-        { 
-          $facet: {
-            totalData: [
-              { $match: {} },
-              { $skip: skip },
-              { $limit: pageSize },
-              { $project : { __v : 0, updatedAt: 0 } }
-            ],
-            totalCount: [
-              { 
-                $count: 'count'
-              }
-            ]
-          }
-        }
-      ])
-
-    if (!docs[0].totalCount.length) {
-      return res.status(404).json({ status: 'failure', message: 'Sorry, it looks like storage is empty. Data not found!'})
-    }
-
-    return res.status(200).json({ total: docs[0].totalCount[0].count, data: docs[0].totalData })
+    docs = await model.aggregate([
+      {
+        $facet: {
+          totalData: [
+            { $match: {} },
+            { $skip: skip },
+            { $limit: pageSize },
+            { $project: { __v: 0, updatedAt: 0 } },
+          ],
+          totalCount: [
+            {
+              $count: "count",
+            },
+          ],
+        },
+      },
+    ]);
   } catch (err) {
-    console.error(err)
-    return res.status(400).json({ status: 'failure', message: err.message })
+    console.error(err);
+    return res.status(400).json({ status: "failure", message: err.message });
   }
-}
-  
+
+  if (!docs[0].totalCount.length) {
+    return res.status(404).json({
+      status: "failure",
+      message: "Sorry, it looks like storage is empty. Data not found!",
+    });
+  }
+
+  res.body = { total: docs[0].totalCount[0].count, data: docs[0].totalData };
+
+  return res.status(200).send(res.body);
+};
+
 // get the whole data
-const getAll = model => async (req, res) => {
+const getAll = (model) => async (req, res) => {
   try {
-    const docs = await model
-      .find({}, { __v: 0, updatedAt: 0 })
+    const docs = await model.find({}, { __v: 0, updatedAt: 0 });
 
     if (!docs.length) {
-      return res.status(404).json({ status: 'failure', message: 'Sorry, it looks like storage is empty. Data was not found!'})
+      return res.status(404).json({
+        status: "failure",
+        message: "Sorry, it looks like storage is empty. Data was not found!",
+      });
     }
 
-    return { total: docs.length, data: docs }
+    return { total: docs.length, data: docs };
   } catch (err) {
-    console.error(err)
-    return res.status(400).json({ status: 'failure', message: err.message })
+    console.error(err);
+    return res.status(400).json({ status: "failure", message: err.message });
   }
-}
+};
 
-const removeMany = model => async (req, res) => {
+const removeMany = (model) => async (req, res) => {
   try {
-    const removed = await model.deleteMany()
+    const removed = await model.deleteMany();
 
     if (!removed.deletedCount) {
-      return res.status(404).json({ status: 'failure', message: 'Sorry, it looks like storage is empty. Data not found!'})
+      return res.status(404).json({
+        status: "failure",
+        message: "Sorry, it looks like storage is empty. Data not found!",
+      });
     }
 
-    return res.status(200).json({ status: 'success', "message": `Totally ${removed.deletedCount} data was removed!` })
+    res.body = {
+      status: "success",
+      message: `Totally ${removed.deletedCount} data was removed!`,
+    };
+
+    return res.status(200).json(res.body);
   } catch (err) {
-    console.error(err)
-    return res.status(400).json({ status: 'failure', message: err.message })
+    console.error(err);
+    return res.status(400).json({ status: "failure", message: err.message });
   }
-}
+};
 
-
-module.exports.crudControllers = model => ({
+module.exports.crudControllers = (model) => ({
   createOne: createOne(model),
   createMany: createMany(model),
   getMany: getMany(model),
   getAll: getAll(model),
-  removeMany: removeMany(model)
-})
+  removeMany: removeMany(model),
+});

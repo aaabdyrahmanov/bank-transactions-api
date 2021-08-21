@@ -1,17 +1,20 @@
-const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
+const mongoose = require("mongoose");
+const { MongoMemoryServer } = require("mongodb-memory-server");
 
 let mongoServer;
 
-const DEFAULT_TEST_DB_NAME = 'test-api';
+const DEFAULT_TEST_DB_NAME = "test-api";
 const DEFAULT_DB_OPTIONS = {
-  useNewUrlParser: true, 
+  useNewUrlParser: true,
   useFindAndModify: false,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 };
 
 // Provide connection to a new in-memory database server
-const connect = async (databaseName = DEFAULT_TEST_DB_NAME, options = DEFAULT_DB_OPTIONS) => {
+const connect = async (
+  databaseName = DEFAULT_TEST_DB_NAME,
+  options = DEFAULT_DB_OPTIONS
+) => {
   // Prevent MongooseError: Can't call `openUri()` on
   // an active connection with different connection strings
   await mongoose.disconnect();
@@ -32,12 +35,12 @@ const close = async () => {
 
 // Remove all data from collections
 const clear = async () => {
-  const collections = mongoose.connection.collections;
+  const { collections } = mongoose.connection;
 
-  for (const key in collections) {
+  Object.keys(collections).forEach(async (key) => {
     const collection = collections[key];
     await collection.deleteMany();
-  }
+  });
 };
 
 module.exports = {

@@ -1,29 +1,29 @@
-const { Sync } = require('../sync.model')
+const { Sync } = require("../sync.model");
 
-describe('sync model', () => {
-  describe('schema', () => {
-    test('status', () => {
-      const status = Sync.schema.obj.status
+describe("sync model", () => {
+  describe("schema", () => {
+    test("status", () => {
+      const { status } = Sync.schema.obj;
       expect(status).toEqual({
         type: String,
         required: true,
-        enum: ['pending', 'success', 'failed'],
-        default: 'pending'
-      })
-    })
+        enum: ["pending", "success", "failed"],
+        default: "pending",
+      });
+    });
 
-    test('operation', () => {
-      const operation = Sync.schema.obj.operation
+    test("operation", () => {
+      const { operation } = Sync.schema.obj;
       expect(operation).toEqual({
-        type: String
-      })
-    })
+        type: String,
+      });
+    });
 
-    test('date', () => {
-      const date = Sync.schema.obj.date
+    test("date", () => {
+      const { date } = Sync.schema.obj;
       expect(date).toEqual({
-        type: Date
-      })
-    })
-  })
-})
+        type: Date,
+      });
+    });
+  });
+});
