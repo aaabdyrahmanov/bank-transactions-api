@@ -1,14 +1,29 @@
 version: "3.7"
 
 services:
-  api:
-    build: ./banking-service
-    container_name: api-server
+  bank-api:
+    build:
+      context: banking-service
+      dockerfile: Dockerfile
+    container_name: bank-server
     restart: always
     ports:
       - "3000:3000"
     depends_on:
       - db
+    networks:
+      - server-network
+    command:
+      "yarn run start"
+
+  tpp-api:
+    build:
+      context: tpp-service
+      dockerfile: Dockerfile
+    container_name: tpp-server
+    restart: always
+    ports:
+      - "8080:8080"
     networks:
       - server-network
     command:
