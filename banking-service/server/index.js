@@ -21,6 +21,7 @@ app.use(
     optionsSuccessStatus: 200,
     method: ["GET", "POST", "DELETE"],
     allowedHeaders: ["Content-Type"],
+    exposeHeaders: ["banking-api-cache", "banking-api-cache-online"],
   })
 );
 

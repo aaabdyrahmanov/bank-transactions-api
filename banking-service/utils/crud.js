@@ -1,3 +1,7 @@
+const { setCache } = require("../middleware");
+
+const DEFAULT_CACHE_TTL = 90;
+
 const createOne = (model) => async (req, res) => {
   const { data } = req.body;
 
@@ -24,6 +28,13 @@ const createMany = (model) => async (data, res) => {
 
 // paginated feature enabled
 const getMany = (model) => async (req, res) => {
+  const { isCached } = req;
+
+  // if cached return the data
+  if (isCached) {
+    return res.status(200).send(res.body);
+  }
+
   const page = req.query.page || 1;
   let pageSize = req.query.limit || 100;
   let skip = 0;
@@ -64,9 +75,11 @@ const getMany = (model) => async (req, res) => {
     });
   }
 
-  res.body = { total: docs[0].totalCount[0].count, data: docs[0].totalData };
+  req.body = { total: docs[0].totalCount[0].count, data: docs[0].totalData };
 
-  return res.status(200).send(res.body);
+  await setCache(req, res, DEFAULT_CACHE_TTL);
+
+  return res.status(200).json(req.body);
 };
 
 // get the whole data
