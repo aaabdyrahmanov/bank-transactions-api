@@ -5,11 +5,14 @@ Synchronizes the Third-Party Provider to retrieve the user transactions/balances
 Following instructions will get you a copy of the project up and running on your local machine for the development and testing purposes.
 
 ## Requirements
-Project can be executed in the following way:
-#### Using yarn as a package manager:
+There are two ways of running the project in your local machine. 
+1) Using yarn as a package manager:
 - Install local [Node.js](https://nodejs.org/) environment
 - Install Package manager to manage packages [yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable)
 - Install local db [MongoDB](https://docs.mongodb.com/manual/installation)
+2) Using docker-compose for running a multi-container Docker apps:
+- Install [docker](https://dockr.ly/3wdYnBM) engine considering your distro
+- Install [docker-compose](https://dockr.ly/3dCq9BD)
 
 ## Setup environment variables
 Go into the root folder:
@@ -28,7 +31,9 @@ TPP_API_URL=http://tpp-service-api.com
 DB_URL=mongodb://127.0.0.1/banking-service
 ```
 
-### Running the project with package manager
+## Running the project
+`Project can be executed in the following two ways:`
+#### 1. Running the project with package manager
 Scripts for Installation and development/testing
 ```bash
 # move into the root project folder
@@ -53,7 +58,20 @@ yarn run test
 yarn run coverage
 ```
 
-### Running TPP-Service as a mock server with OpenAPI v3.x 
+#### 2. Running the project in a container with Docker
+Commands for running the app and getting detailed information on the process.
+```bash
+# Build services
+docker-compose up -d --build
+# list containers
+docker ps
+# list all local images
+sudo docker image ls 
+# get the docker-compose logs
+docker-compose logs
+```
+
+## Running TPP-Service as a mock server with OpenAPI v3.x 
 1) Using [Mockoon](https://mockoon.com):
 - Download the application considering your OS
 - Import Swagger [tpp-service/tpp-service-docs.json](https://github.com/aaabdyrahmanov/bank-transactions-api/blob/master/tpp-service/tpp-service-docs.json) OpenAPI documentation and serve it as a mock server [Import](https://mockoon.com/docs/latest/import-export-data)
