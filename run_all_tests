@@ -1,0 +1,10 @@
+#!/bin/sh
+
+cd ./banking-service
+yarn test
+cd -
+
+cd ./tpp-service
+yarn install
+yarn test
+cd -
