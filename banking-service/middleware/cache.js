@@ -1,27 +1,29 @@
 const Redis = require("ioredis");
 const blake3 = require("blake3");
 
-const BANKING_SERVICE_REDIS = require("../config");
+const { NODE_ENV, BANKING_SERVICE_REDIS } = require("../config");
 
 let redis;
 let redisAvailable = false;
 
-if (BANKING_SERVICE_REDIS) {
-  redis = new Redis(BANKING_SERVICE_REDIS);
-} else {
-  redis = new Redis();
-}
+if (NODE_ENV == "production") {
+  if (BANKING_SERVICE_REDIS) {
+    redis = new Redis(BANKING_SERVICE_REDIS);
+  } else {
+    redis = new Redis();
+  }
 
-redis.on("error", () => {
-  redisAvailable = false;
-});
-redis.on("end", () => {
-  redisAvailable = false;
-});
-redis.on("ready", () => {
-  redisAvailable = true;
-  console.info("Redis connected");
-});
+  redis.on("error", () => {
+    redisAvailable = false;
+  });
+  redis.on("end", () => {
+    redisAvailable = false;
+  });
+  redis.on("ready", () => {
+    redisAvailable = true;
+    console.info("Redis connected");
+  });
+}
 
 /**
  * BLAKE3 hash func for redis keys
@@ -37,6 +39,10 @@ const hash = (str) => blake3.createHash().update(str).digest("hex");
  * @returns {void}
  */
 async function cache(req, res, next) {
+  if (NODE_ENV !== "prodcution") {
+    return next();
+  }
+
   if (!redisAvailable) {
     res.set("banking-api-cache-online", "false");
     return next();
@@ -78,6 +84,10 @@ async function cache(req, res, next) {
  * @param   {Number}    ttl       Cache TTL in seconds
  */
 function setCache(req, res, ttl) {
+  if (NODE_ENV !== "production") {
+    return;
+  }
+
   if (!redisAvailable) {
     res.set("banking-api-cache-online", "false");
     return;
