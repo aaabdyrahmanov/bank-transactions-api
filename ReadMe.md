@@ -90,6 +90,35 @@ prism mock /YOUR_LOCAL_PATH/bank-transactions-api/tpp-service/tpp-service-docs.j
 
 NOTE: By default prism starts on http://127.0.0.1:4010 which is set as a default on your configuration files. Thus, if you are running the server using a prism, there is no need to include it on your .env file. 
 
+
+
+## Running the Tests
+There are two ways of running the tests on your local machine. 
+1) To run each microservice tests one by one, go to the respective service directory where the package.json is located and run tests.
+
+> For example: to run the tests for the banking-service
+> ```bash
+> cd banking-service
+> yarn test
+> ```
+
+2) To run all tests for the entire microservices, execute a file 'run_all_tests' which is included test running scripts that has been created in the root directory.
+
+```bash
+# run the test cases
+./run_all_tests
+```
+
+> **NOTE**: If there is `sudo: ./run_all_tests: command not found` notification then make sure that you have set necessary executable permission of a file on your local machine. To do that:
+```
+# set file execute permission
+chmod +x run_all_tests 
+
+# run the test cases
+./run_all_tests
+```
+
+
 ### Testing Environment
 Available banking-service enpoints can be tested using the [Postman Collection](https://www.getpostman.com/collections/0a6e8b7aa1e97639dd90) which is prepared considering the available API calls.
 
