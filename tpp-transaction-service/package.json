@@ -1,5 +1,5 @@
 {
-  "name": "tpp-service",
+  "name": "tpp-transaction-service",
   "version": "1.0.0",
   "main": "index.js",
   "author": "Atamyrat Abdyrahmanov <atamyrat@abdyrahmanov.com>",
