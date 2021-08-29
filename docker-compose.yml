@@ -1,53 +1,116 @@
-version: "3.7"
+version: "3.2"
 
 services:
-  bank-api:
+  bank-service:
     build:
-      context: banking-service
+      context: local-bank-service
       dockerfile: Dockerfile
-    container_name: bank-server
+    container_name: bank-service
     restart: always
     ports:
-      - "3000:3000"
+      - ${LOCAL_BANK_SERVICE_PORT}:${LOCAL_BANK_SERVICE_PORT}
+    environment:
+      - PORT=${LOCAL_BANK_SERVICE_PORT}
+      - AMQP_URL=${AMQP_URL}
+      - AMQP_EXCHANGE_NAME=${AMQP_EXCHANGE_NAME}
+      - AMQP_QUEUE_NAME=${AMQP_QUEUE_NAME}
+      - AMQP_ROUTING_KEY=${AMQP_ROUTING_KEY}
+      - CACHE_URL=${CACHE_URL}
+      - EMAIL_SERVICE=${EMAIL_SERVICE}
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_ID=${EMAIL_ID}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - EMAIL_FROM=${EMAIL_FROM}
+      - EMAIL_TO=${EMAIL_TO}
+      - LOCAL_BANK_SERVICE_DB_URL=${LOCAL_BANK_SERVICE_DB_URL}
+      - TPP_TRANSACTION_SERVICE_URL=${TPP_TRANSACTION_SERVICE_URL}
     depends_on:
+      - cache
       - db
+      - rabbitmq
+      - tpp-service
     networks:
       - server-network
-    command:
-      "yarn run start"
+    command: "yarn run start"
 
-  tpp-api:
+  notification:
     build:
-      context: tpp-service
+      context: tpp-notification-service
       dockerfile: Dockerfile
-    container_name: tpp-server
+    container_name: notification
     restart: always
     ports:
-      - "8080:8080"
+      - ${TPP_NOTIFICATION_PORT}:${TPP_NOTIFICATION_PORT}
+    environment:
+      - PORT=${TPP_NOTIFICATION_PORT}
+      - AMQP_URL=${AMQP_URL}
+      - AMQP_QUEUE_NAME=${AMQP_QUEUE_NAME}
+      - EMAIL_SERVICE=${EMAIL_SERVICE}
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_ID=${EMAIL_ID}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - EMAIL_FROM=${EMAIL_FROM}
+      - EMAIL_TO=${EMAIL_TO}
+      - LOCAL_BANK_SERVICE_URL=${LOCAL_BANK_SERVICE_URL}
+    depends_on:
+      - bank-service
+      - rabbitmq
+      - tpp-service
     networks:
       - server-network
-    command:
-      "yarn run start"
+    command: "yarn run start"
+
+  tpp-service:
+    build:
+      context: tpp-transaction-service
+      dockerfile: Dockerfile
+    container_name: tpp-service
+    restart: always
+    ports:
+      - ${TPP_TRANSACTION_SERVICE_PORT}:${TPP_TRANSACTION_SERVICE_PORT}
+    environment:
+      - PORT=${TPP_TRANSACTION_SERVICE_PORT}
+    networks:
+      - server-network
+    command: "yarn run start"
 
   db:
     image: mongo:4-bionic
-    container_name: api-db
+    container_name: db
     volumes:
-      - db-data:/data/db
+      - ~/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ~/mongo-volume:/data/db
     restart: unless-stopped
     environment:
-      MONGO_INITDB_DATABASE: api-db
+      MONGO_INITDB_DATABASE: bank-transactions-db
       MONGODB_DATA_DIR: /data/db
-      MONDODB_LOG_DIR: /dev/null
     ports:
       - "27017:27017"
     networks:
       - server-network
 
-volumes:
-  db-data:
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - 5673:5672
+      - 15673:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+    networks:
+      - server-network
+
+  cache:
+    image: redis:4
+    container_name: cache
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - server-network
 
 networks:
   server-network:
-    name: app-network
     driver: bridge
