@@ -4,7 +4,7 @@ require("dotenv").config();
 module.exports = {
   HOST: process.env.HOST,
   PORT: process.env.PORT,
-  TPP_SERVICE_URL: process.env.TPP_TRANSACTIONS_SERVICE_URL,
+  TPP_SERVICE_URL: process.env.TPP_TRANSACTION_SERVICE_URL,
   DB_URL: process.env.LOCAL_BANK_SERVICE_DB_URL,
   CACHE_URL: process.env.CACHE_URL,
   AMQP_URL: process.env.AMQP_URL,
