@@ -1,0 +1,30 @@
+{
+  "name": "tpp-notification-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Atamyrat Abdyrahmanov <atamyrat@abdyrahmanov.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "lint": "pretty-quick -w . && eslint . --fix"
+  },
+  "dependencies": {
+    "amqplib": "^0.8.0",
+    "axios": "^0.21.1",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "moment-timezone": "^0.5.33",
+    "nodemailer": "^6.6.3",
+    "nodemailer-smtp-transport": "^2.7.4"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.24.0",
+    "prettier": "^2.3.2",
+    "pretty-quick": "^3.1.1"
+  }
+}
