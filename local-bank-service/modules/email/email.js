@@ -26,7 +26,7 @@ module.exports.sendTechnicalFailureEmail = async (id, date) => {
     const mailOptions = {
       from: EMAIL.FROM,
       to: EMAIL.TO,
-      subject: "Local Central Bank - New Synchronization Received!",
+      subject: "Local Central Bank - Synchronization Rejection!",
       html: emailHtml,
     };
 

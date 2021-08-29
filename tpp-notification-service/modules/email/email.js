@@ -26,7 +26,7 @@ module.exports.sendSynchAcceptionEmail = async (id, date) => {
     const mailOptions = {
       from: EMAIL.FROM,
       to: EMAIL.TO,
-      subject: "Local Central Bank - New Synchronization Received!",
+      subject: "TPP Central Bank - New Synchronization Received!",
       html: emailHtml,
     };
 

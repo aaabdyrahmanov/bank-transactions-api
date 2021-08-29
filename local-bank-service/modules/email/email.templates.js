@@ -6,7 +6,7 @@ module.exports.GetRenderedTransactionTechnicalFailureEmailHtml = ({
   terminatedAt,
 }) => {
   const name = "Dear Sir or Madam";
-  const header = `A new synchronization with the TransactionId: <strong>${id}</strong> which has been <u>launched</u> at ${formatDate(
+  const header = `Synchronization with the TransactionId: <strong>${id}</strong> which has been <u>launched</u> at ${formatDate(
     launchedAt
   )} - <u>terminated</u> at ${formatDate(
     terminatedAt
