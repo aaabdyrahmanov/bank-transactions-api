@@ -5,14 +5,14 @@ const writeFile = require("./fileWriter");
 /**
  * Export the file as HTTP response attachment
  * @param {object} res - HTTP response object
- * @param {object} file - includes file config and data
+ * @param {object} file - includes file config, fields and data
  */
 module.exports = (res, file) => {
   // write the data as in expected file format
   writeFile(file);
 
   const transformOpts = { highWaterMark: 16384, encoding: "utf-8" };
-  const json2csv = new Transform(transformOpts);
+  const json2csv = new Transform({ fields: file.fields }, transformOpts);
 
   const readStream = createReadStream(`${file.name}.${file.type}`, {
     encoding: "utf8",
