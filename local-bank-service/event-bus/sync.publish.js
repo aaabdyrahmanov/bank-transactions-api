@@ -13,7 +13,7 @@ module.exports = async (data) => {
     const channel = await connection.createChannel();
 
     try {
-      await channel.assertExchange(AMQP_EXCHANGE, "fanout", { durable: true });
+      await channel.assertExchange(AMQP_EXCHANGE, "direct", { durable: true });
 
       await channel.assertQueue(AMQP_QUEUE, { durable: true });
       await channel.bindQueue(AMQP_QUEUE, AMQP_EXCHANGE, AMQP_ROUTING_KEY);
