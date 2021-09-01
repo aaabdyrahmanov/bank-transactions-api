@@ -23,12 +23,14 @@ async function initializeSync(req, res) {
   };
   const sync = await crudControllers(Sync).createOne(req);
 
-  /* eslint-disable no-underscore-dangle */
-  await publish({
-    id: sync.data._id,
-    ...req.body.data,
-    requests: apiCalls,
-  });
+  if (process.env.NODE_ENV !== "test") {
+    /* eslint-disable no-underscore-dangle */
+    await publish({
+      id: sync.data._id,
+      ...req.body.data,
+      requests: apiCalls,
+    });
+  }
 
   return res.status(201).json(sync);
 }
