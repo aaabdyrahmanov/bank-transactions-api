@@ -16,18 +16,12 @@ const { sendTechnicalFailureEmail } = require("../../modules/email/email");
 async function initializeSync(req, res) {
   const { operations } = req;
   const apiCalls = operations.map((op) => createAPICall(op));
-  let sync;
 
-  try {
-    req.body.data = {
-      status: "pending",
-      date: Date.now(),
-    };
-    sync = await crudControllers(Sync).createOne(req);
-  } catch (err) {
-    console.error(`Synchronization Initializing Error: ${err.message}`);
-    return res.status(500).json({ message: err.message });
-  }
+  req.body.data = {
+    status: "pending",
+    date: Date.now(),
+  };
+  const sync = await crudControllers(Sync).createOne(req);
 
   /* eslint-disable no-underscore-dangle */
   await publish({
