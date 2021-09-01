@@ -129,4 +129,4 @@ Object.defineProperty(module.exports, "redis", {
   writable: false,
 });
 
-module.exports = { cache, setCache };
+module.exports = { cache, setCache, redis };
