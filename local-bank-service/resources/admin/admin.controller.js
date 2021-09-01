@@ -29,7 +29,9 @@ async function checkHealth(req, res) {
  */
 async function clearCache(req, res) {
   try {
-    await redis.flushall();
+    if (process.env.NODE_ENV !== 'test') {
+      await redis.flushall(); 
+    }
     res.status(200).send({ status: "success", message: "Data cleared successully!"})
   } catch (err) {
     console.error(err.message);
