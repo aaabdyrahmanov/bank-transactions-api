@@ -49,17 +49,12 @@ const getMany = (model) => async (req, res) => {
     docs = await model.aggregate([
       {
         $facet: {
-          totalData: [
+          data: [
             { $match: {} },
             { $skip: skip },
             { $limit: pageSize },
             { $project: { __v: 0, updatedAt: 0 } },
-          ],
-          totalCount: [
-            {
-              $count: "count",
-            },
-          ],
+          ]
         },
       },
     ]);
@@ -68,14 +63,14 @@ const getMany = (model) => async (req, res) => {
     return res.status(400).json({ status: "failure", message: err.message });
   }
 
-  if (!docs[0].totalCount.length) {
+  if (!docs[0].data.length) {
     return res.status(404).json({
       status: "failure",
       message: "Sorry, it looks like storage is empty. Data not found!",
     });
   }
 
-  req.body = { total: docs[0].totalCount[0].count, data: docs[0].totalData };
+  req.body = { total: docs[0].data.length, data: docs[0].data };
 
   await setCache(req, res, DEFAULT_CACHE_TTL);
 
@@ -92,7 +87,10 @@ const updateOne = (model) => async (req, res) => {
     );
 
     if (!updatedDoc) {
-      return res.status(400).end();
+      return res.status(400).send({
+        status: "failure",
+        message: "Invalid document ID. PLease, provide valid information!"
+      });
     }
 
     return res.status(200).json(updatedDoc);
