@@ -1,0 +1,19 @@
+name: Test Workflow - Bank Transactions API
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: Install services and run test cases
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with: 
+          node-version: ${{ matrix.node-version }}
+
+      - name: Execute test running file
+        run: chmod +x run_all_tests && ./run_all_tests
