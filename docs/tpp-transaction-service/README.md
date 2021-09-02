@@ -6,6 +6,10 @@
 
 `https://tpp-service-prod.us-east-1.elasticbeanstalk.com`
 
+## API Documentation
+
+- OpenAPI documentation is served on `/api/documentation` endpoint. For more information on docs - [Images](images)
+
 ## Launch date field explanations
 
 * `lastDate` -  UTC operation date/time in ISO 8601 format
