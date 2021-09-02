@@ -46,7 +46,10 @@ async function terminateSync(req, res) {
 
   try {
     if (isSucceed && req.body.data.length) {
-      if (req.body.data[0].transactions && req.body.data[0].transactions.status == "technicalFailure") {
+      if (
+        req.body.data[0].transactions &&
+        req.body.data[0].transactions.status == "technicalFailure"
+      ) {
         sendTechnicalFailureEmail(req.body.id, req.body.date);
       } else {
         if (req.body.data[0].transactions.length) {
