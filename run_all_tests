@@ -1,10 +1,11 @@
 #!/bin/sh
 
-cd ./banking-service
+cd ./local-bank-service
+yarn install
 yarn test
 cd -
 
-cd ./tpp-service
+cd ./tpp-transaction-service
 yarn install
 yarn test
 cd -
