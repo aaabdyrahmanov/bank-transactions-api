@@ -47,12 +47,12 @@ async function executeCalls(reqData) {
     const response = await call(reqData.requests[i]);
 
     // check if there is any client server related error
-    if (!response.success) {
+    if (response.status !== "success") {
       isFailed = true;
     }
 
     const obj = {};
-    obj[reqData.requests[i].type] = response.data;
+    obj[reqData.requests[i].type] = response;
     data.push(obj);
   }
 

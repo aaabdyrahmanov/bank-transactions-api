@@ -13,8 +13,8 @@ module.exports = async (data) => {
       validateStatus: () => true,
     });
 
-    return { success: true, data: response.data };
+    return { status: "success", data: response.data };
   } catch (err) {
-    return { success: false, data: err.message };
+    return { status: "technicalFailure", data: err.message };
   }
 };
