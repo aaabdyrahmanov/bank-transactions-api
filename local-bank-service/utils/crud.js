@@ -1,7 +1,5 @@
 const { setCache } = require("../middleware");
 
-const DEFAULT_CACHE_TTL = 90;
-
 const createOne = (model) => async (req) => {
   const { data } = req.body;
 
@@ -78,7 +76,7 @@ const getMany = (model) => async (req, res) => {
 
   req.body = { total: docs[0].data.length, data: docs[0].data };
 
-  await setCache(req, res, DEFAULT_CACHE_TTL);
+  await setCache(req, res);
 
   return res.status(200).json(req.body);
 };

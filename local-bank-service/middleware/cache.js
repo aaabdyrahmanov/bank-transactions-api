@@ -5,6 +5,7 @@ const { CACHE_URL } = require("../config");
 
 let redis;
 let redisAvailable = false;
+const DEFAULT_CACHE_TTL = 90;
 
 if (process.env.NODE_ENV == "production") {
   if (CACHE_URL) {
@@ -83,7 +84,7 @@ async function cache(req, res, next) {
  * @param   {Object}    res       HTTP response
  * @param   {Number}    ttl       Cache TTL in seconds
  */
-function setCache(req, res, ttl) {
+function setCache(req, res, ttl = DEFAULT_CACHE_TTL) {
   if (process.env.NODE_ENV !== "production") {
     return;
   }
