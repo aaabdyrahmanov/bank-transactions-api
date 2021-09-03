@@ -23,7 +23,7 @@ module.exports = async (data) => {
         Buffer.from(JSON.stringify(data))
       );
     } catch (err) {
-      console.error(err.message);
+      throw new Error(err.message);
     } finally {
       console.info("Closing channel....");
       await channel.close();
@@ -31,7 +31,7 @@ module.exports = async (data) => {
       console.log("Channel and connection is being closed!");
     }
   } catch (err) {
-    console.error(
+    throw new Error(
       `Error Listening to URL ${AMQP_URL}, exchange: ${AMQP_EXCHANGE}, queue: ${AMQP_QUEUE} : ${err.message}`
     );
   }
