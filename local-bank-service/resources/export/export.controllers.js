@@ -32,7 +32,14 @@ async function exportTransactions(req, res) {
   ];
 
   try {
-    const { data } = await TransactionController.getAll(req, res);
+    const { data } = await TransactionController.getAll();
+
+    if (!data.length) {
+      return res.status(404).json({
+        status: "failure",
+        message: "Sorry, it looks like storage is empty. Data was not found!",
+      });
+    }
 
     const { input, transform } = exportDataAsFile({ ...file, fields, data });
 
@@ -69,7 +76,14 @@ async function exportBalances(req, res) {
   ];
 
   try {
-    const { data } = await BalanceController.getAll(req, res);
+    const { data } = await BalanceController.getAll();
+
+    if (!data.length) {
+      return res.status(404).json({
+        status: "failure",
+        message: "Sorry, it looks like storage is empty. Data was not found!",
+      });
+    }
 
     const { input, transform } = exportDataAsFile({ ...file, fields, data });
 
@@ -77,7 +91,7 @@ async function exportBalances(req, res) {
     res.attachment(`${file.name}.${file.type}`);
 
     // pipe the read stream to the response object
-    input.pipe(transform).pipe(res);    
+    input.pipe(transform).pipe(res);
   } catch (error) {
     console.error(`Export ${file.name} error: ${error.message}`);
     return res.status(400).json({ status: "failure", message: error.message });

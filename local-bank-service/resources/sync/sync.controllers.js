@@ -21,9 +21,10 @@ async function initializeSync(req, res) {
     status: "pending",
     date: Date.now(),
   };
-  const sync = await crudControllers(Sync).createOne(req);
-
+  
   try {
+    const sync = await crudControllers(Sync).createOne(req);
+
     if (process.env.NODE_ENV !== "test") {
       /* eslint-disable no-underscore-dangle */
       await publish({
@@ -35,7 +36,7 @@ async function initializeSync(req, res) {
 
     return res.status(201).json(sync);
   } catch (err) {
-    console.error(err.message);
+    console.error(`Synch Initiation Error: ${err.message}`);
     return res.status(400).json({ status: "failure", message: err.message });
   }
 }
@@ -70,10 +71,19 @@ async function terminateSync(req, res) {
       }
     }
 
-    await crudControllers(Sync).updateOne(req, res);
+    const sync = await crudControllers(Sync).updateOne(req);
+
+    if (!sync.data) {
+      return res.status(400).json({
+        status: "failure",
+        message: "Invalid document ID. PLease, provide valid information!",
+      });
+    }
+
+    return res.status(200).json(sync);
   } catch (err) {
     console.error(`Synch Termination Error: ${err.message}`);
-    return res.status(500).json({ message: err.message });
+    return res.status(400).json({ status: "failure", message: err.message });
   }
 }
 

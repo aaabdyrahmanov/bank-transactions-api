@@ -2,7 +2,7 @@ const { setCache } = require("../middleware");
 
 const DEFAULT_CACHE_TTL = 90;
 
-const createOne = (model) => async (req, res) => {
+const createOne = (model) => async (req) => {
   const { data } = req.body;
 
   try {
@@ -10,19 +10,25 @@ const createOne = (model) => async (req, res) => {
 
     return { status: "success", data: doc };
   } catch (err) {
-    console.error(err.message);
-    return res.status(400).json({ status: "failure", message: err.message });
+    throw new Error(err.message);
   }
 };
 
-const createMany = (model) => async (data, res) => {
+const createMany = (model) => async (req, res) => {
+  const { data } = req.body;
+
+  if (!data) {
+    return res
+      .status(400)
+      .json({ status: "failure", message: "Missing request body!" });
+  }
+
   try {
     const doc = await model.insertMany(data);
 
-    return { status: "success", data: doc };
+    return res.status(201).json({ status: "success", data: doc });
   } catch (err) {
-    console.error(err.message);
-    return res.status(400).json({ status: "failure", message: err.message });
+    throw new Error(err.message);
   }
 };
 
@@ -77,7 +83,7 @@ const getMany = (model) => async (req, res) => {
   return res.status(200).json(req.body);
 };
 
-const updateOne = (model) => async (req, res) => {
+const updateOne = (model) => async (req) => {
   try {
     const updatedDoc = await model.findOneAndUpdate(
       {
@@ -86,36 +92,20 @@ const updateOne = (model) => async (req, res) => {
       req.body
     );
 
-    if (!updatedDoc) {
-      return res.status(400).send({
-        status: "failure",
-        message: "Invalid document ID. PLease, provide valid information!"
-      });
-    }
-
-    return res.status(200).json(updatedDoc);
+    return { status: "success", data: updatedDoc };
   } catch (err) {
-    console.error(err.message);
-    return res.status(400).json({ status: "failure", message: err.message });
+    throw new Error(err.message);
   }
 };
 
 // get the whole data
-const getAll = (model) => async (req, res) => {
+const getAll = (model) => async () => {
   try {
     const docs = await model.find({}, { __v: 0, updatedAt: 0 });
 
-    if (!docs.length) {
-      return res.status(404).json({
-        status: "failure",
-        message: "Sorry, it looks like storage is empty. Data was not found!",
-      });
-    }
-
-    return { total: docs.length, data: docs };
+    return { status: "success", data: docs };
   } catch (err) {
-    console.error(err.message);
-    return res.status(400).json({ status: "failure", message: err.message });
+    throw new Error(err.message);
   }
 };
 
@@ -130,12 +120,10 @@ const removeMany = (model) => async (req, res) => {
       });
     }
 
-    res.body = {
+    return res.status(200).json({
       status: "success",
       message: `Totally ${removed.deletedCount} data was removed!`,
-    };
-
-    return res.status(200).json(res.body);
+    });
   } catch (err) {
     console.error(err.message);
     return res.status(400).json({ status: "failure", message: err.message });

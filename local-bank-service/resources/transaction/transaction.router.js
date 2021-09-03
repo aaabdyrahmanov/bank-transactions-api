@@ -10,7 +10,7 @@ const { cache } = require("../../middleware");
 router
   .route("/")
   .get(cache, controllers.getMany)
-  .post(controllers.createAll)
+  .post(controllers.createMany)
   .delete(controllers.removeMany);
 
 module.exports = router;

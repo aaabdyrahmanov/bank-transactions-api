@@ -19,7 +19,7 @@ describe("transaction controllers", () => {
   });
 
   test("Transaction #1 - has crud controllers", () => {
-    const crudMethods = ["getMany", "createAll", "removeMany"];
+    const crudMethods = ["getMany", "createMany", "removeMany"];
 
     crudMethods.forEach((name) =>
       expect(typeof controllers[name]).toBe("function")
