@@ -34,10 +34,16 @@ async function exportTransactions(req, res) {
   try {
     const { data } = await TransactionController.getAll(req, res);
 
-    exportDataAsFile(res, { ...file, fields, data });
+    const { input, transform } = exportDataAsFile({ ...file, fields, data });
+
+    res.header("Content-Type", "text/csv");
+    res.attachment(`${file.name}.${file.type}`);
+
+    // pipe the read stream to the response object
+    input.pipe(transform).pipe(res);
   } catch (error) {
     console.error(`Export ${file.name} error: ${error.message}`);
-    return res.status(400);
+    return res.status(400).json({ status: "failure", message: error.message });
   }
 }
 
@@ -65,10 +71,16 @@ async function exportBalances(req, res) {
   try {
     const { data } = await BalanceController.getAll(req, res);
 
-    exportDataAsFile(res, { ...file, fields, data });
+    const { input, transform } = exportDataAsFile({ ...file, fields, data });
+
+    res.header("Content-Type", "text/csv");
+    res.attachment(`${file.name}.${file.type}`);
+
+    // pipe the read stream to the response object
+    input.pipe(transform).pipe(res);    
   } catch (error) {
     console.error(`Export ${file.name} error: ${error.message}`);
-    return res.status(400);
+    return res.status(400).json({ status: "failure", message: error.message });
   }
 }
 
