@@ -1,5 +1,5 @@
-const BalanceController = require("../balance/balance.controllers");
-const TransactionController = require("../transaction/transaction.controllers");
+const BalanceController = require("../balances/balance.controllers");
+const TransactionController = require("../transactions/transaction.controllers");
 const { exportData: exportDataAsFile } = require("../../helper");
 
 async function exportTransactions(req, res) {
@@ -99,6 +99,6 @@ async function exportBalances(req, res) {
 }
 
 module.exports = {
-  transaction: exportTransactions,
-  balance: exportBalances,
+  transactions: exportTransactions,
+  balances: exportBalances,
 };

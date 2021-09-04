@@ -5,7 +5,7 @@ const controllers = require("./transaction.controllers");
 const { cache } = require("../../middleware");
 
 /**
-    /v1/transaction
+    /v1/transactions
  */
 router
   .route("/")

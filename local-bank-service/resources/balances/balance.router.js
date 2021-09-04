@@ -5,7 +5,7 @@ const controllers = require("./balance.controllers");
 const { cache } = require("../../middleware");
 
 /**
-    /v1/balance
+    /v1/balances
  */
 router
   .route("/")

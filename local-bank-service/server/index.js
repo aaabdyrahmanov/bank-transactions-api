@@ -8,10 +8,10 @@ const compression = require("compression");
 
 // import API routes
 const adminRouter = require("../resources/admin/admin.router");
-const balanceRouter = require("../resources/balance/balance.router");
+const balanceRouter = require("../resources/balances/balance.router");
 const exportRouter = require("../resources/export/export.router");
-const syncRouter = require("../resources/sync/sync.router");
-const transactionRouter = require("../resources/transaction/transaction.router");
+const syncRouter = require("../resources/syncs/sync.router");
+const transactionRouter = require("../resources/transactions/transaction.router");
 
 const app = express();
 
@@ -41,10 +41,10 @@ app.use(compression());
 
 // // attach routes
 app.use("/v1/admin", adminRouter);
-app.use("/v1/balance", balanceRouter);
+app.use("/v1/balances", balanceRouter);
 app.use("/v1/export", exportRouter);
-app.use("/v1/sync", syncRouter);
-app.use("/v1/transaction", transactionRouter);
+app.use("/v1/syncs", syncRouter);
+app.use("/v1/transactions", transactionRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

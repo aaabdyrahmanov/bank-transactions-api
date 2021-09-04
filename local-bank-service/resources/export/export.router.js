@@ -1,19 +1,14 @@
-const router = require('express').Router()
-const controllers = require('./export.controllers')
+const router = require("express").Router();
+const controllers = require("./export.controllers");
 
 /**
-    /v1/export/transaction
+    /v1/export/transactions
  */
-router
-    .route('/transaction')
-    .get(controllers.transaction)
+router.route("/transactions").get(controllers.transactions);
 
 /**
-    /v1/export/balance
+    /v1/export/balances
  */
-router
-    .route('/balance')
-    .get(controllers.balance)
+router.route("/balances").get(controllers.balances);
 
-    
-module.exports = router
+module.exports = router;

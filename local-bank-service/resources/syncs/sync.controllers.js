@@ -1,7 +1,7 @@
 const { crudControllers } = require("../../utils/crud");
 const { Sync } = require("./sync.model");
-const { Balance } = require("../balance/balance.model");
-const { Transaction } = require("../transaction/transaction.model");
+const { Balance } = require("../balances/balance.model");
+const { Transaction } = require("../transactions/transaction.model");
 
 const { createAPICall } = require("../../helper");
 const { publish } = require("../../event-bus");
@@ -21,7 +21,7 @@ async function initializeSync(req, res) {
     status: "pending",
     date: Date.now(),
   };
-  
+
   try {
     const sync = await crudControllers(Sync).createOne(req);
 
