@@ -1,22 +1,22 @@
-const express = require('express')
-const { json, urlencoded } = require("body-parser")
-const createError = require('http-errors')
+const express = require("express");
+const { json, urlencoded } = require("body-parser");
+const createError = require("http-errors");
 
 // import API routes
-const routes = require('../route')
+const routes = require("../route");
 
-const app = express()
+const app = express();
 
 // request body parser middleware
-app.use(json())
-app.use(urlencoded({ extended: false }))
+app.use(json());
+app.use(urlencoded({ extended: false }));
 
 // attach routes
-app.use(routes)
+app.use(routes);
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  next(createError(404))
-})
+app.use((req, res, next) => {
+  next(createError(404));
+});
 
-module.exports = app
+module.exports = app;
