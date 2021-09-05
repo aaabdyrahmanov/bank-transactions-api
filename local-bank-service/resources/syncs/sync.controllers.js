@@ -75,7 +75,7 @@ async function terminateSync(req, res) {
     const sync = await crudControllers(Sync).updateOne(req);
 
     if (!sync.data) {
-      return res.status(400).json({
+      return res.status(404).json({
         status: "failure",
         message: "Invalid document ID. PLease, provide valid information!",
       });
