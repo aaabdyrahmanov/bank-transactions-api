@@ -15,5 +15,9 @@ jobs:
         with: 
           node-version: ${{ matrix.node-version }}
 
-      - name: Execute test running file
-        run: chmod +x run_all_tests && ./run_all_tests
+      - name: Go into the local-bank service directory and run test cases
+        run: cd local-bank-service && yarn install && yarn test  
+
+      - name: Go into the tpp-transaction service directory and run test cases
+        run: cd tpp-transaction-service && yarn install && yarn test      
+
