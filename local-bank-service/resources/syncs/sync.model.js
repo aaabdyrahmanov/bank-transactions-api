@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const syncsSchema = new mongoose.Schema(
   {
+    id: {
+      type: String,
+      required: true,
+    },
     status: {
       type: String,
       required: true,

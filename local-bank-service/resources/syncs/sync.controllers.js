@@ -16,23 +16,24 @@ const { sendTechnicalFailureEmail } = require("../../modules/email/email");
 async function initializeSync(req, res) {
   const { operations } = req;
   const apiCalls = operations.map((op) => createAPICall(op));
-
-  req.body.data = {
-    status: "pending",
-    date: Date.now(),
-  };
+  const uniqueId = `sync_${Date.now()}`;
 
   try {
-    const sync = await crudControllers(Sync).createOne(req);
-
     if (process.env.NODE_ENV !== "test") {
-      /* eslint-disable no-underscore-dangle */
       await publish({
-        id: sync.data._id,
+        id: uniqueId,
         ...req.body.data,
         requests: apiCalls,
       });
     }
+
+    req.body.data = {
+      id: uniqueId,
+      status: "pending",
+      date: Date.now(),
+    };
+
+    const sync = await crudControllers(Sync).createOne(req);
 
     return res.status(201).json(sync);
   } catch (err) {
