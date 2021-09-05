@@ -29,7 +29,7 @@ describe("sync controllers", () => {
 
   test("Sync #2 - should download transactions successfully", async () => {
     // launch sync
-    const res = await api.post("/v1/sync/init");
+    const res = await api.post("/v1/syncs/init");
 
     expect(res.statusCode).toEqual(201);
   });
@@ -39,7 +39,7 @@ describe("sync controllers", () => {
 
     // launch sync
     const res = await api.post(
-      `/v1/sync/init?lastTransactionId=?${lastTransactionId}`
+      `/v1/syncs/init?lastTransactionId=?${lastTransactionId}`
     );
 
     expect(res.statusCode).toEqual(201);
@@ -49,7 +49,7 @@ describe("sync controllers", () => {
     const lastDate = new Date();
 
     // launch sync
-    const res = await api.post(`/v1/sync/init?lastDate=${lastDate}`);
+    const res = await api.post(`/v1/syncs/init?lastDate=${lastDate}`);
 
     expect(res.statusCode).toEqual(400);
   });
@@ -57,7 +57,7 @@ describe("sync controllers", () => {
   test("Sync #5 - should fail with invalid ISO date format", async () => {
     const lastDate = "9999-88-77T66:55:44.000Z";
 
-    const res = await api.post(`/v1/sync/init?lastDate=${lastDate}`);
+    const res = await api.post(`/v1/syncs/init?lastDate=${lastDate}`);
 
     expect(res.statusCode).toEqual(400);
   });
@@ -67,14 +67,14 @@ describe("sync controllers", () => {
     const lastDate = "2021-10-05T14:48:00.000Z";
 
     const res = await api.post(
-      `/v1/sync/init?lastTransactionId=?${lastTransactionId}?lastDate=${lastDate}`
+      `/v1/syncs/init?lastTransactionId=?${lastTransactionId}?lastDate=${lastDate}`
     );
 
     expect(res.statusCode).toEqual(201);
   });
 
   test("Sync #7 - should delete the data", async () => {
-    const res = await api.delete("/v1/sync");
+    const res = await api.delete("/v1/syncs");
 
     expect(res.statusCode).toEqual(404);
   });

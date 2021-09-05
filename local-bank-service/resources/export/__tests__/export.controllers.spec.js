@@ -20,7 +20,7 @@ describe("export controllers", () => {
   });
 
   test("Export #1 - has crud controllers", () => {
-    const crudMethods = ["transaction", "balance"];
+    const crudMethods = ["transactions", "balances"];
 
     crudMethods.forEach((name) =>
       expect(typeof controllers[name]).toBe("function")
@@ -29,7 +29,7 @@ describe("export controllers", () => {
 
   test("Export Transaction #2 - should download transactions successfully", async () => {
     // create new transactions
-    await api.post("/v1/transaction").send({
+    await api.post("/v1/transactions").send({
       data: [
         {
           id: "193e7ab4-9251-43fa-b852-8ea2b652920e",
@@ -49,7 +49,7 @@ describe("export controllers", () => {
     });
 
     // export transaction data
-    const res = await api.get("/v1/export/transaction");
+    const res = await api.get("/v1/export/transactions");
 
     const result = {
       status: res.statusCode,
@@ -61,7 +61,7 @@ describe("export controllers", () => {
   });
 
   test("Export Transaction #3 - should fail with an empty store", async () => {
-    const res = await api.get("/v1/export/transaction");
+    const res = await api.get("/v1/export/transactions");
 
     expect(res.statusCode).toEqual(404);
     expect(res.body.status).toEqual("failure");
@@ -69,7 +69,7 @@ describe("export controllers", () => {
 
   test("Export Balance #4 - should download transactions successfully", async () => {
     // create new balances
-    await api.post("/v1/balance").send({
+    await api.post("/v1/balances").send({
       data: [
         { amount: 88124523, date: "2021-10-05T14:48:00.000Z" },
         { amount: 88124523, date: "2020-01-01T01:00:00.000Z" },
@@ -77,7 +77,7 @@ describe("export controllers", () => {
     });
 
     // export balance data
-    const res = await api.get("/v1/export/balance");
+    const res = await api.get("/v1/export/balances");
 
     const result = {
       status: res.statusCode,
@@ -89,7 +89,7 @@ describe("export controllers", () => {
   });
 
   test("Export Balance #5 - should fail with an empty store", async () => {
-    const res = await api.get("/v1/export/balance");
+    const res = await api.get("/v1/export/balances");
 
     expect(res.statusCode).toEqual(404);
     expect(res.body.status).toEqual("failure");

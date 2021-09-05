@@ -3,8 +3,8 @@ const router = require('../export.router')
 describe('export router', () => {
   test('has crud routes', () => {
     const routes = [
-      { path: '/transaction', method: 'get' },
-      { path: '/balance', method: 'get' }
+      { path: '/transactions', method: 'get' },
+      { path: '/balances', method: 'get' }
     ]
 
     routes.forEach(route => {

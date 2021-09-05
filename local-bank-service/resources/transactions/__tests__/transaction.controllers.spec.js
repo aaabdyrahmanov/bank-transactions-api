@@ -28,14 +28,14 @@ describe("transaction controllers", () => {
 
   test("Balance #2 - should fail new transactions creation with missing body", async () => {
     // create new transactions
-    const res = await api.post("/v1/transaction").send();
+    const res = await api.post("/v1/transactions").send();
 
     expect(res.statusCode).toEqual(400);
   });
 
   test("Transaction #3 - should create new transactions successfully", async () => {
     // create new transactions
-    const res = await api.post("/v1/transaction").send({
+    const res = await api.post("/v1/transactions").send({
       data: [
         {
           id: "193e7ab4-9251-43fa-b852-8ea2b652920e",
@@ -52,7 +52,7 @@ describe("transaction controllers", () => {
 
   test("Transaction #4 - should get transactions successfully", async () => {
     // create new balances
-    await api.post("/v1/transaction").send({
+    await api.post("/v1/transactions").send({
       data: [
         {
           id: "193e7ab4-9251-43fa-b852-8ea2b652920e",
@@ -65,21 +65,21 @@ describe("transaction controllers", () => {
     });
 
     // get transactions
-    const res = await api.get("/v1/transaction");
+    const res = await api.get("/v1/transactions");
 
     expect(res.statusCode).toEqual(200);
   });
 
   test("Transaction #5 - should fail to get transactions with missing pagination", async () => {
     // get nonexistent transaction data
-    const res = await api.get("/v1/transaction?limit=80&page=23");
+    const res = await api.get("/v1/transactions?limit=80&page=23");
 
     expect(res.statusCode).toEqual(404);
   });
 
   test("Transaction #6 - should remove transactions data", async () => {
     // create new transactions
-    await api.post("/v1/transaction").send({
+    await api.post("/v1/transactions").send({
       data: [
         {
           id: "193e7ab4-9251-43fa-b852-8ea2b652920e",
@@ -92,14 +92,14 @@ describe("transaction controllers", () => {
     });
 
     // remove balances
-    const res = await api.delete("/v1/transaction");
+    const res = await api.delete("/v1/transactions");
 
     expect(res.statusCode).toEqual(200);
   });
 
   test("Transaction #7 - should fail to remove transactions data", async () => {
     // remove transactions
-    const res = await api.delete("/v1/transaction");
+    const res = await api.delete("/v1/transactions");
 
     expect(res.statusCode).toEqual(404);
   });
