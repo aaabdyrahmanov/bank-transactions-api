@@ -15,10 +15,10 @@ async function checkHealth(req, res) {
       timestamp: Date.now(),
     };
 
-    return res.status(200).send(health);
+    return res.status(200).json(health);
   } catch (err) {
     console.error(err.message);
-    return res.status(503).send({ status: "failure", message: err.message });
+    return res.status(503);
   }
 }
 
@@ -32,10 +32,12 @@ async function clearCache(req, res) {
     if (process.env.NODE_ENV !== 'test') {
       await redis.flushall(); 
     }
-    res.status(200).send({ status: "success", message: "Data cleared successully!"})
+    return res
+      .status(200)
+      .json({ status: "success", message: "Data cleared successully!" });
   } catch (err) {
     console.error(err.message);
-    return res.status(400).send({ status: "failure", message: err.message });     
+    return res.status(400).json({ status: "failure", message: err.message });
   }
 }
 
