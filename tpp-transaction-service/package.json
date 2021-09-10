@@ -5,10 +5,12 @@
   "author": "Atamyrat Abdyrahmanov <atamyrat@abdyrahmanov.com>",
   "license": "MIT",
   "scripts": {
+    "coverage": "jest --coverage --silent",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
     "lint": "pretty-quick -w . && eslint . --fix",
     "lint-staged": "lint-staged",
-    "start": "node index.js",
-    "test": "mocha"
+    "start": "cross-env NODE_ENV=production node index.js",
+    "test": "cross-env NODE_ENV=test jest --forceExit --detectOpenHandles  --silent"
   },
   "husky": {
     "hooks": {
@@ -24,14 +26,15 @@
       "pretty-quick --staged"
     ]
   },
-  "directories": {
-    "test": "./test"
-  },
   "dependencies": {
     "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "http-errors": "^1.7.2",
+    "mongodb-memory-server": "^7.4.0",
+    "mongoose": "^5.13.3",
     "pretty-quick": "^3.1.1",
     "swagger-ui-express": "^4.1.6"
   },
@@ -43,9 +46,15 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.25.1",
     "husky": "^7.0.2",
+    "jest": "^27.1.1",
     "lint-staged": "^11.1.2",
-    "mocha": "^9.0.3",
+    "nodemon": "^2.0.12",
     "prettier": "^2.3.2",
     "supertest": "^6.1.6"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverage": true,
+    "testTimeout": 60000
   }
 }

@@ -70,6 +70,7 @@ services:
       - ${TPP_TRANSACTION_SERVICE_PORT}:${TPP_TRANSACTION_SERVICE_PORT}
     environment:
       - PORT=${TPP_TRANSACTION_SERVICE_PORT}
+      - TPP_TRANSACTION_SERVICE_DB_URL=${TPP_TRANSACTION_SERVICE_DB_URL}
     networks:
       - server-network
     command: "yarn run start"

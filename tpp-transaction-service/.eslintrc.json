@@ -1,11 +1,12 @@
 {
   "env": {
     "node": true,
-    "mocha": true
+    "jest": true
   },
 
   "extends": ["airbnb", "prettier"],
   "rules": {
+    "camelcase": "off",
     "no-console": "off"
   },
   "settings": {
