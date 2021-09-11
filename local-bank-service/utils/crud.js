@@ -26,7 +26,8 @@ const createMany = (model) => async (req, res) => {
 
     return res.status(201).json({ status: "success", data: doc });
   } catch (err) {
-    throw new Error(err.message);
+    console.error(err.message);
+    return res.status(400).json({ status: "failure", message: err.message });
   }
 };
 
