@@ -40,17 +40,14 @@ const getMany = (model) => async (req, res) => {
     return res.status(200).send(res.body);
   }
 
-  const page = req.query.page || 1;
-  let pageSize = req.query.limit || 100;
-  let skip = 0;
+  // coercion - implicitly type conversion
+  // string into number using *1
+  const page = req.query.page * 1 || 1;
+  const pageSize = req.query.limit * 1 || 100;
+  const skip = (page - 1) * pageSize;
   let docs;
 
   try {
-    if (pageSize) {
-      pageSize *= 1;
-      skip = (page - 1) * pageSize;
-    }
-
     docs = await model.aggregate([
       {
         $facet: {
