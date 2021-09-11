@@ -1,3 +1,5 @@
+const { pipeline, finished } = require("stream");
+
 const BalanceController = require("../balances/balance.controllers");
 const TransactionController = require("../transactions/transaction.controllers");
 const { exportData: exportDataAsFile } = require("../../helper");
@@ -41,13 +43,29 @@ async function exportTransactions(req, res) {
       });
     }
 
-    const { input, transform } = exportDataAsFile({ ...file, fields, data });
+    const { dataReadable, dataParser, JSON2CSV } = exportDataAsFile({
+      ...file,
+      fields,
+      data,
+    });
 
     res.header("Content-Type", "text/csv");
     res.attachment(`${file.name}.${file.type}`);
 
-    // pipe the read stream to the response object
-    input.pipe(transform).pipe(res);
+    // pipe the data to the response object
+    pipeline(dataReadable, dataParser, JSON2CSV, res, (err) => {
+      if (err) {
+        throw new Error("Pipeline failed: ", err);
+      }
+      console.log("Pipeline succeed: Data exported successfully!");
+    });
+
+    // handle the stream error when it is finished
+    finished(JSON2CSV, (err) => {
+      if (err) {
+        throw new Error("Stream failed: ", err);
+      }
+    });
   } catch (error) {
     console.error(`Export ${file.name} error: ${error.message}`);
     return res.status(400).json({ status: "failure", message: error.message });
@@ -85,13 +103,29 @@ async function exportBalances(req, res) {
       });
     }
 
-    const { input, transform } = exportDataAsFile({ ...file, fields, data });
+    const { dataReadable, dataParser, JSON2CSV } = exportDataAsFile({
+      ...file,
+      fields,
+      data,
+    });
 
     res.header("Content-Type", "text/csv");
     res.attachment(`${file.name}.${file.type}`);
 
-    // pipe the read stream to the response object
-    input.pipe(transform).pipe(res);
+    // pipe the data to the response object
+    pipeline(dataReadable, dataParser, JSON2CSV, res, (err) => {
+      if (err) {
+        throw new Error("Pipeline failed: ", err);
+      }
+      console.log("Pipeline succeed: Data exported successfully!");
+    });
+
+    // handle the stream error when it is finished
+    finished(JSON2CSV, (err) => {
+      if (err) {
+        throw new Error("Stream failed: ", err);
+      }
+    });
   } catch (error) {
     console.error(`Export ${file.name} error: ${error.message}`);
     return res.status(400).json({ status: "failure", message: error.message });
