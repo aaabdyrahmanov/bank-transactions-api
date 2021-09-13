@@ -9,7 +9,7 @@ const { dateFormatter: formatDate } = require(".");
  * @param {object} file - includes file config, fields and data
  */
 module.exports = (file) => {
-  // read the data with stream
+  // convert the data into readable stream
   const dataReadable = new Readable({
     objectMode: true,
   });
