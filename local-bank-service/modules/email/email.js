@@ -33,6 +33,6 @@ module.exports.sendTechnicalFailureEmail = async (id, date) => {
     // email delivery
     transporter.sendMail(mailOptions);
   } catch (err) {
-    console.error(`Error sending email: ${err.message}`);
+    throw new Error(`Error sending email: ${err.message}`);
   }
 };
