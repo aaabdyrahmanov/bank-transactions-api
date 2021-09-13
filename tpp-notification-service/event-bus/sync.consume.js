@@ -1,3 +1,4 @@
+/* eslint-disable no-await-in-loop */
 const amqplib = require("amqplib");
 
 const { AMQP_URL, AMQP_QUEUE, LOCAL_BANK_SERVICE_URL } = require("../config");
@@ -9,7 +10,7 @@ module.exports = async () => {
   const channel = await connection.createChannel();
 
   channel.prefetch(10);
-  
+
   process.once("SIGINT", async () => {
     console.log("got sigint, closing connection");
     await channel.close();
@@ -43,11 +44,14 @@ async function executeCalls(reqData) {
   let isFailed = false;
 
   for (let i = 0; i < reqData.requests.length; i += 1) {
-    /* eslint-disable no-await-in-loop */
     const response = await call(reqData.requests[i]);
 
     // check if there is any client server related error
-    if (response.status !== "success") {
+    // fail only if there is any error in transactions
+    if (
+      response.status !== "success" &&
+      reqData.requests[i].type == "transactions"
+    ) {
       isFailed = true;
     }
 

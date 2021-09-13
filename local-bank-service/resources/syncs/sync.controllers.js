@@ -16,21 +16,22 @@ const { sendTechnicalFailureEmail } = require("../../modules/email/email");
 async function initializeSync(req, res) {
   const { operations } = req;
   const apiCalls = operations.map((op) => createAPICall(op));
-  const uniqueId = `sync_${Date.now()}`;
+  const currentDate = Date.now();
+  const uniqueId = `sync_${currentDate}`;
 
   try {
     if (process.env.NODE_ENV !== "test") {
       await publish({
         id: uniqueId,
-        ...req.body.data,
+        date: currentDate,
         requests: apiCalls,
       });
     }
 
     req.body.data = {
       id: uniqueId,
+      date: currentDate,
       status: "pending",
-      date: Date.now(),
     };
 
     const sync = await crudControllers(Sync).createOne(req);
@@ -52,23 +53,18 @@ async function terminateSync(req, res) {
   const isSucceed = req.body.status === "succeed";
 
   try {
-    if (isSucceed && req.body.data.length) {
-      if (
-        req.body.data[0].transactions &&
-        req.body.data[0].transactions.status == "technicalFailure"
-      ) {
-        sendTechnicalFailureEmail(req.body.id, req.body.date);
-      } else {
-        if (req.body.data[0].transactions.length) {
-          await crudControllers(Transaction).createMany(
-            req.body.data[0].transactions
-          );
-          req.body.data.shift();
-        }
-        if (req.body.data[0].balances) {
-          await crudControllers(Balance).createMany(req.body.data[0].balances);
-          req.body.data.shift();
-        }
+    if (!isSucceed) {
+      sendTechnicalFailureEmail(req.body.id, req.body.date);
+    } else if (isSucceed && req.body.data.length) {
+      if (req.body.data[0].transactions.length) {
+        await crudControllers(Transaction).createMany(
+          req.body.data[0].transactions
+        );
+        req.body.data.shift();
+      }
+      if (req.body.data[0].balances) {
+        await crudControllers(Balance).createMany(req.body.data[0].balances);
+        req.body.data.shift();
       }
     }
 
