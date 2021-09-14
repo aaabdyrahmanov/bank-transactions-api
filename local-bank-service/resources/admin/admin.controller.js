@@ -6,20 +6,13 @@ const { redis } = require("../../middleware");
  * @returns {object} health object - server status
  */
 async function checkHealth(req, res) {
-  let health;
+  const health = {
+    uptime: process.uptime(),
+    message: "OK",
+    timestamp: Date.now(),
+  };
 
-  try {
-    health = {
-      uptime: process.uptime(),
-      message: "OK",
-      timestamp: Date.now(),
-    };
-
-    return res.status(200).json(health);
-  } catch (err) {
-    console.error(err.message);
-    return res.status(503);
-  }
+  return res.status(200).json(health);
 }
 
 /**
