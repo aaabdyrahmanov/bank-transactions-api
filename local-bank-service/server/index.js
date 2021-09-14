@@ -51,18 +51,4 @@ app.use((req, res, next) => {
   next(createError(404));
 });
 
-// error-handling middleware functions
-app.use((err, req, res) => {
-  console.error(err);
-
-  // If err has no specified error code,
-  // set error code to 'Internal Server Error (500)'
-  res.status(err.status || 500);
-  res.send(
-    req.app.get("env") === "development"
-      ? { message: err.message, stack: err.stack }
-      : { message: err.message }
-  );
-});
-
 module.exports = app;
