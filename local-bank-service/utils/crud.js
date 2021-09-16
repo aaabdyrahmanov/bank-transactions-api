@@ -29,6 +29,16 @@ const createMany = (model) => async (req, res) => {
   }
 };
 
+const createManyOnly = (model) => async (data) => {
+  try {
+    const doc = await model.insertMany(data);
+
+    return { status: "success", data: doc };
+  } catch (err) {
+    throw new Error(err.message);
+  }
+};
+
 // paginated feature enabled
 const getMany = (model) => async (req, res) => {
   // coercion - implicitly type conversion
@@ -116,6 +126,7 @@ const removeMany = (model) => async (req, res) => {
 module.exports.crudControllers = (model) => ({
   createOne: createOne(model),
   createMany: createMany(model),
+  createManyOnly: createManyOnly(model),
   getMany: getMany(model),
   getAll: getAll(model),
   removeMany: removeMany(model),
