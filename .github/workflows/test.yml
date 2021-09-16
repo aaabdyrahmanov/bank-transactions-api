@@ -3,21 +3,30 @@ name: Test Workflow - Bank Transactions API
 on: [push, pull_request]
 
 jobs:
-  test:
+  container-job:
     name: Install services and run test cases
     runs-on: ubuntu-latest
 
+    services:
+      rabbitmq:
+        image: rabbitmq:3-management
+        ports:
+          - 5672:5672
+
     steps:
       - uses: actions/checkout@v1
-
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
-        with: 
+        with:
           node-version: ${{ matrix.node-version }}
 
       - name: Go into the local-bank service directory and run test cases
-        run: cd local-bank-service && yarn install && yarn test  
+        run: cd local-bank-service && yarn install && yarn test
+        env:
+          AMQP_URL: amqp://localhost:5672
+          AMQP_EXCHANGE_NAME: sync.central_bank
+          AMQP_QUEUE: sync.init.central_bank
+          AMQP_ROUTING_KEY: sync_routing_key
 
       - name: Go into the tpp-transaction service directory and run test cases
-        run: cd tpp-transaction-service && yarn install && yarn test      
-
+        run: cd tpp-transaction-service && yarn install && yarn test
