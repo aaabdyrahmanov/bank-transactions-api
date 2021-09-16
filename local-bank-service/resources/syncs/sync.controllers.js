@@ -84,7 +84,7 @@ async function terminateSync(req, res) {
       await crudControllers(Transaction).createManyOnly(
         req.body.data[0].transactions
       );
-      if (req.body.data[0].transactions.length) {
+      if (req.body.data[1].balances.length) {
         await crudControllers(Balance).createManyOnly(
           req.body.data[1].balances
         );
