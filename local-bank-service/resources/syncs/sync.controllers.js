@@ -3,7 +3,7 @@ const { Sync } = require("./sync.model");
 const { Balance } = require("../balances/balance.model");
 const { Transaction } = require("../transactions/transaction.model");
 
-const { createAPICall } = require("../../helper");
+const { createAPICall, Logger } = require("../../helper");
 const { publish } = require("../../event-bus");
 const { sendTechnicalFailureEmail } = require("../../modules/email/email");
 
@@ -23,7 +23,6 @@ async function initializeSync(req, res) {
     if (process.env.NODE_ENV !== "test") {
       await publish({
         id: uniqueId,
-        date: currentDate,
         requests: apiCalls,
       });
     }

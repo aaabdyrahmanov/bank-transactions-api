@@ -23,7 +23,10 @@ module.exports = async () => {
     AMQP_QUEUE,
     async (msg) => {
       const receivedSync = JSON.parse(msg.content.toString());
-      await sendSynchAcceptionEmail(receivedSync.id, receivedSync.date);
+      await sendSynchAcceptionEmail(
+        receivedSync.id,
+        receivedSync.id.replace("sync_", "")
+      );
 
       // execute necessary HTTP calls
       await executeCalls(receivedSync);
