@@ -1,10 +1,9 @@
-const router = require('../admin.router')
+const router = require('../health.router')
 
-describe('admin router', () => {
-  test('has crud routes', () => {
+describe('health router', () => {
+  test('has health check route', () => {
     const routes = [
       { path: '/health', method: 'get' },
-      { path: '/cache', method: 'delete' },
     ]
 
     routes.forEach(route => {

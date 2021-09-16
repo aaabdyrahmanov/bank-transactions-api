@@ -15,7 +15,6 @@ services:
       - AMQP_EXCHANGE_NAME=${AMQP_EXCHANGE_NAME}
       - AMQP_QUEUE_NAME=${AMQP_QUEUE_NAME}
       - AMQP_ROUTING_KEY=${AMQP_ROUTING_KEY}
-      - CACHE_URL=${CACHE_URL}
       - EMAIL_SERVICE=${EMAIL_SERVICE}
       - EMAIL_HOST=${EMAIL_HOST}
       - EMAIL_ID=${EMAIL_ID}
@@ -25,7 +24,6 @@ services:
       - LOCAL_BANK_SERVICE_DB_URL=${LOCAL_BANK_SERVICE_DB_URL}
       - TPP_TRANSACTION_SERVICE_URL=${TPP_TRANSACTION_SERVICE_URL}
     depends_on:
-      - cache
       - db
       - rabbitmq
       - tpp-service
@@ -100,15 +98,6 @@ services:
     volumes:
       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
-    networks:
-      - server-network
-
-  cache:
-    image: redis:4
-    container_name: cache
-    restart: always
-    ports:
-      - "6379:6379"
     networks:
       - server-network
 

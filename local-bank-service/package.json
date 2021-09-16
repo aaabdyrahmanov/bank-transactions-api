@@ -38,7 +38,6 @@
     "express": "^4.17.1",
     "helmet": "^4.6.0",
     "http-errors": "^1.8.0",
-    "ioredis": "^4.27.8",
     "json2csv": "^5.0.6",
     "moment-timezone": "^0.5.33",
     "mongodb-memory-server": "^7.3.6",

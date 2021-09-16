@@ -16,19 +16,9 @@ Each route is individually versioned, for now the only avaliable version is `v1`
 
 See the [pagination](pagination.md) guide for more details and examples.
 
-## Caching
-
-The api makes use of response caching via Redis on `GET` requests for each resource `/balances`, `/syncs` and `/transactions` endpoints.
-
-Default standard cache time is 90 seconds.
-
-Cache can be cleared with the following endpoint:
-
-- 🔒 [Clear cache](admin/v1/cache.md) : `DELETE /v1/admin/cache`
-
 ## Routes
 
-### [Admin](admin) - Info for checking the server health and clearing the cache
+### [Health](health) - Checking the server health
 
 ### [Balances](balances) - Detailed info for serialized balances
 

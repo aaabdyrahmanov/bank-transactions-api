@@ -1,5 +1,3 @@
-const { setCache } = require("../middleware");
-
 const createOne = (model) => async (req) => {
   const { data } = req.body;
 
@@ -33,13 +31,6 @@ const createMany = (model) => async (req, res) => {
 
 // paginated feature enabled
 const getMany = (model) => async (req, res) => {
-  const { isCached } = req;
-
-  // if cached return the data
-  if (isCached) {
-    return res.status(200).send(res.body);
-  }
-
   // coercion - implicitly type conversion
   // string into number using *1
   const page = req.query.page * 1 || 1;
@@ -60,23 +51,19 @@ const getMany = (model) => async (req, res) => {
         },
       },
     ]);
+
+    if (!docs[0].data.length) {
+      return res.status(404).json({
+        status: "failure",
+        message: "Sorry, it looks like storage is empty. Data not found!",
+      });
+    }
+
+    return res.status(200).json({ total: docs[0].data.length, data: docs[0].data });
   } catch (err) {
     console.error(err.message);
     return res.status(400).json({ status: "failure", message: err.message });
   }
-
-  if (!docs[0].data.length) {
-    return res.status(404).json({
-      status: "failure",
-      message: "Sorry, it looks like storage is empty. Data not found!",
-    });
-  }
-
-  req.body = { total: docs[0].data.length, data: docs[0].data };
-
-  await setCache(req, res);
-
-  return res.status(200).json(req.body);
 };
 
 const updateOne = (model) => async (req) => {

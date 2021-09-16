@@ -7,7 +7,7 @@ const cors = require("cors");
 const compression = require("compression");
 
 // import API routes
-const adminRouter = require("../resources/admin/admin.router");
+const healthRouter = require("../resources/health/health.router");
 const balanceRouter = require("../resources/balances/balance.router");
 const exportRouter = require("../resources/export/export.router");
 const syncRouter = require("../resources/syncs/sync.router");
@@ -22,7 +22,6 @@ app.use(
     optionsSuccessStatus: 200,
     method: ["GET", "POST", "DELETE"],
     allowedHeaders: ["Content-Type"],
-    exposeHeaders: ["banking-api-cache", "banking-api-cache-online"],
   })
 );
 
@@ -40,7 +39,7 @@ app.use(logger("dev"));
 app.use(compression());
 
 // // attach routes
-app.use("/v1/admin", adminRouter);
+app.use("/v1", healthRouter);
 app.use("/v1/balances", balanceRouter);
 app.use("/v1/export", exportRouter);
 app.use("/v1/syncs", syncRouter);

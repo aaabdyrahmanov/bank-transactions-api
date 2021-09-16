@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 const controllers = require("./sync.controllers");
 
-const { cache, validateFormat } = require("../../middleware");
+const { validateFormat } = require("../../middleware");
 
 /**
   /v1/syncs/init
@@ -19,7 +19,7 @@ router.post("/terminate", controllers.terminateSync);
  */
 router
   .route("/")
-  .get(cache, controllers.getMany)
+  .get(controllers.getMany)
   .delete(controllers.removeMany);
 
 module.exports = router;

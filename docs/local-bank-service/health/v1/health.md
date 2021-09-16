@@ -2,7 +2,7 @@
 
 **Method** : `GET`
 
-**URL** : `https://local-bank-service-prod.us-east-1.elasticbeanstalk.com/v1/admin/health`
+**URL** : `https://local-bank-service-prod.us-east-1.elasticbeanstalk.com/v1/health`
 
 ## Success Response
 
