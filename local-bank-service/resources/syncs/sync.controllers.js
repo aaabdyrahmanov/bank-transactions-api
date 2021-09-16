@@ -41,7 +41,7 @@ async function initializeSync(req, res) {
 }
 
 /**
- * @desc finish with synchronization sent by TPP
+ * @desc terminates the synchronization using the message sent by notification service
  * @param object req - http request
  * @param object res - http response
  * @returns object - newly created sync
