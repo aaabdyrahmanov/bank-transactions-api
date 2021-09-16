@@ -24,7 +24,7 @@ const createMany = (model) => async (req, res) => {
 
     return res.status(201).json({ status: "success", data: doc });
   } catch (err) {
-    console.error(err.message);
+    console.error(err);
     return res.status(400).json({ status: "failure", message: err.message });
   }
 };
@@ -61,7 +61,7 @@ const getMany = (model) => async (req, res) => {
 
     return res.status(200).json({ total: docs[0].data.length, data: docs[0].data });
   } catch (err) {
-    console.error(err.message);
+    console.error(err);
     return res.status(400).json({ status: "failure", message: err.message });
   }
 };
@@ -108,7 +108,7 @@ const removeMany = (model) => async (req, res) => {
       message: `Totally ${removed.deletedCount} data was removed!`,
     });
   } catch (err) {
-    console.error(err.message);
+    console.error(err);
     return res.status(400).json({ status: "failure", message: err.message });
   }
 };

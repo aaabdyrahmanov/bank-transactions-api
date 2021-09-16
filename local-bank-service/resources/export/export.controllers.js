@@ -59,9 +59,9 @@ async function exportTransactions(req, res) {
       }
       console.log("Pipeline succeed: Data exported successfully!");
     });
-  } catch (error) {
-    console.error(`Export ${file.name} error: ${error.message}`);
-    return res.status(400).json({ status: "failure", message: error.message });
+  } catch (err) {
+    console.error(err);
+    return res.status(400).json({ status: "failure", message: err.message });
   }
 }
 
@@ -112,9 +112,9 @@ async function exportBalances(req, res) {
       }
       console.log("Pipeline succeed: Data exported successfully!");
     });
-  } catch (error) {
-    console.error(`Export ${file.name} error: ${error.message}`);
-    return res.status(400).json({ status: "failure", message: error.message });
+  } catch (err) {
+    console.error(err);
+    return res.status(400).json({ status: "failure", message: err.message });
   }
 }
 

@@ -35,7 +35,7 @@ async function initializeSync(req, res) {
 
     return res.status(201).json(sync);
   } catch (err) {
-    console.error(`Synch Initiation Error: ${err.message}`);
+    console.error(err);
     return res.status(400).json({ status: "failure", message: err.message });
   }
 }
@@ -93,7 +93,7 @@ async function terminateSync(req, res) {
 
     return res.status(200).json(sync);
   } catch (err) {
-    console.error(`Synch Termination Error: ${err.message}`);
+    console.error(err);
     return res.status(400).json({ status: "failure", message: err.message });
   }
 }
