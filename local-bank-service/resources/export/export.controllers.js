@@ -1,4 +1,4 @@
-const { pipeline, finished } = require("stream");
+const { pipeline } = require("stream");
 
 const BalanceController = require("../balances/balance.controllers");
 const TransactionController = require("../transactions/transaction.controllers");
@@ -59,13 +59,6 @@ async function exportTransactions(req, res) {
       }
       console.log("Pipeline succeed: Data exported successfully!");
     });
-
-    // handle the stream error when it is finished
-    finished(JSON2CSV, (err) => {
-      if (err) {
-        throw new Error("Stream failed: ", err);
-      }
-    });
   } catch (error) {
     console.error(`Export ${file.name} error: ${error.message}`);
     return res.status(400).json({ status: "failure", message: error.message });
@@ -118,13 +111,6 @@ async function exportBalances(req, res) {
         throw new Error("Pipeline failed: ", err);
       }
       console.log("Pipeline succeed: Data exported successfully!");
-    });
-
-    // handle the stream error when it is finished
-    finished(JSON2CSV, (err) => {
-      if (err) {
-        throw new Error("Stream failed: ", err);
-      }
     });
   } catch (error) {
     console.error(`Export ${file.name} error: ${error.message}`);
