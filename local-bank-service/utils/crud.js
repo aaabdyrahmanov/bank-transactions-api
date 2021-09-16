@@ -1,3 +1,5 @@
+const { Logger } = require("../helper");
+
 const createOne = (model) => async (req) => {
   const { data } = req.body;
 
@@ -24,7 +26,7 @@ const createMany = (model) => async (req, res) => {
 
     return res.status(201).json({ status: "success", data: doc });
   } catch (err) {
-    console.error(err);
+    Logger.error(err);
     return res.status(400).json({ status: "failure", message: err.message });
   }
 };
@@ -57,21 +59,24 @@ const getMany = (model) => async (req, res) => {
             { $skip: skip },
             { $limit: pageSize },
             { $project: { __v: 0, updatedAt: 0 } },
-          ]
+          ],
         },
       },
     ]);
 
     if (!docs[0].data.length) {
+      Logger.warn("Data not found!");
       return res.status(404).json({
         status: "failure",
         message: "Sorry, it looks like storage is empty. Data not found!",
       });
     }
 
-    return res.status(200).json({ total: docs[0].data.length, data: docs[0].data });
+    return res
+      .status(200)
+      .json({ total: docs[0].data.length, data: docs[0].data });
   } catch (err) {
-    console.error(err);
+    Logger.error(err);
     return res.status(400).json({ status: "failure", message: err.message });
   }
 };
@@ -107,6 +112,7 @@ const removeMany = (model) => async (req, res) => {
     const removed = await model.deleteMany();
 
     if (!removed.deletedCount) {
+      Logger.warn("Data not found!");
       return res.status(404).json({
         status: "failure",
         message: "Sorry, it looks like storage is empty. Data not found!",
@@ -118,7 +124,7 @@ const removeMany = (model) => async (req, res) => {
       message: `Totally ${removed.deletedCount} data was removed!`,
     });
   } catch (err) {
-    console.error(err);
+    Logger.error(err);
     return res.status(400).json({ status: "failure", message: err.message });
   }
 };

@@ -1,7 +1,7 @@
 const express = require("express");
 const { json, urlencoded } = require("body-parser");
 const createError = require("http-errors");
-const logger = require("morgan");
+const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
 const compression = require("compression");
@@ -12,6 +12,8 @@ const balanceRouter = require("../resources/balances/balance.router");
 const exportRouter = require("../resources/export/export.router");
 const syncRouter = require("../resources/syncs/sync.router");
 const transactionRouter = require("../resources/transactions/transaction.router");
+
+const logger = require("../config/logger");
 
 const app = express();
 
@@ -33,7 +35,7 @@ app.use(json());
 app.use(urlencoded({ extended: false }));
 
 // HTTP request logger middleware
-app.use(logger("dev"));
+app.use(morgan("tiny", { stream: logger.stream }));
 
 // compacting responses using GZIP middleware
 app.use(compression());

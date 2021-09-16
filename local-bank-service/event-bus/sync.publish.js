@@ -6,6 +6,7 @@ const {
   AMQP_QUEUE,
   AMQP_ROUTING_KEY,
 } = require("../config");
+const { Logger } = require("../helper");
 
 module.exports = async (data) => {
   try {
@@ -25,10 +26,10 @@ module.exports = async (data) => {
     } catch (err) {
       throw new Error(err.message);
     } finally {
-      console.info("Closing channel....");
+      Logger.info("Closing channel....");
       await channel.close();
       await connection.close();
-      console.log("Channel and connection is being closed!");
+      Logger.info("Channel and connection is being closed!");
     }
   } catch (err) {
     throw new Error(

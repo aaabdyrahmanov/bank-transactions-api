@@ -3,7 +3,7 @@ const { Sync } = require("./sync.model");
 const { Balance } = require("../balances/balance.model");
 const { Transaction } = require("../transactions/transaction.model");
 
-const { createAPICall } = require("../../helper");
+const { createAPICall, Logger } = require("../../helper");
 const { publish } = require("../../event-bus");
 const { sendTechnicalFailureEmail } = require("../../modules/email/email");
 
@@ -35,7 +35,7 @@ async function initializeSync(req, res) {
 
     return res.status(201).json(sync);
   } catch (err) {
-    console.error(err);
+    Logger.error(err);
     return res.status(400).json({ status: "failure", message: err.message });
   }
 }
@@ -62,7 +62,7 @@ async function terminateSync(req, res) {
 
     // missing body OR invalid sync status
     if (!req.body || typeof isSucceed !== "boolean") {
-      console.info("Invalid body or synchronization ID!");
+      Logger.warn("Invalid body or synchronization ID!");
       return res.status(404).json({
         status: "failure",
         message:
@@ -93,7 +93,7 @@ async function terminateSync(req, res) {
 
     return res.status(200).json(sync);
   } catch (err) {
-    console.error(err);
+    Logger.error(err);
     return res.status(400).json({ status: "failure", message: err.message });
   }
 }

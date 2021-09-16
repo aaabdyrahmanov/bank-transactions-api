@@ -2,7 +2,7 @@ const { pipeline } = require("stream");
 
 const BalanceController = require("../balances/balance.controllers");
 const TransactionController = require("../transactions/transaction.controllers");
-const { exportData: exportDataAsFile } = require("../../helper");
+const { exportData: exportDataAsFile, Logger } = require("../../helper");
 
 async function exportTransactions(req, res) {
   const file = { name: "transactions", type: "csv" };
@@ -57,10 +57,10 @@ async function exportTransactions(req, res) {
       if (err) {
         throw new Error("Pipeline failed: ", err);
       }
-      console.log("Pipeline succeed: Data exported successfully!");
+      Logger.info("Pipeline succeed: Data exported successfully!");
     });
   } catch (err) {
-    console.error(err);
+    Logger.error(err);
     return res.status(400).json({ status: "failure", message: err.message });
   }
 }
@@ -110,10 +110,10 @@ async function exportBalances(req, res) {
       if (err) {
         throw new Error("Pipeline failed: ", err);
       }
-      console.log("Pipeline succeed: Data exported successfully!");
+      Logger.info("Pipeline succeed: Data exported successfully!");
     });
   } catch (err) {
-    console.error(err);
+    Logger.error(err);
     return res.status(400).json({ status: "failure", message: err.message });
   }
 }
