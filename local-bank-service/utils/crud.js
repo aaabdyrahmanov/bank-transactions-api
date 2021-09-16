@@ -80,7 +80,7 @@ const updateOne = (model) => async (req) => {
   try {
     const updatedDoc = await model.findOneAndUpdate(
       {
-        _id: req.body.id,
+        id: req.body.id,
       },
       req.body
     );
