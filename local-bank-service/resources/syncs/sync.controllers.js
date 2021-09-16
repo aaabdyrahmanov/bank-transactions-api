@@ -20,12 +20,10 @@ async function initializeSync(req, res) {
   const uniqueId = `sync_${currentDate}`;
 
   try {
-    if (process.env.NODE_ENV !== "test") {
-      await publish({
-        id: uniqueId,
-        requests: apiCalls,
-      });
-    }
+    await publish({
+      id: uniqueId,
+      requests: apiCalls,
+    });
 
     req.body.data = {
       id: uniqueId,
