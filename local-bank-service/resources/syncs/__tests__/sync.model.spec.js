@@ -7,7 +7,7 @@ describe("sync model", () => {
       expect(status).toEqual({
         type: String,
         required: true,
-        enum: ["pending", "success", "failed"],
+        enum: ["pending", "succeed", "failed"],
         default: "pending",
       });
     });

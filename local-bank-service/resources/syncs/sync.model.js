@@ -9,7 +9,7 @@ const syncsSchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: ["pending", "success", "failed"],
+      enum: ["pending", "succeed", "failed"],
       default: "pending",
     },
     operation: {
