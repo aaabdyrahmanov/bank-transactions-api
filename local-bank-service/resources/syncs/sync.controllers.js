@@ -3,7 +3,7 @@ const { Sync } = require("./sync.model");
 const { Balance } = require("../balances/balance.model");
 const { Transaction } = require("../transactions/transaction.model");
 
-const { createAPICall, Logger } = require("../../helper");
+const { createAPICall } = require("../../helper");
 const { publish } = require("../../event-bus");
 const { sendTechnicalFailureEmail } = require("../../modules/email/email");
 
@@ -49,31 +49,48 @@ async function initializeSync(req, res) {
  * @returns object - newly created sync
  */
 async function terminateSync(req, res) {
-  const isSucceed = req.body.status === "succeed";
+  let isSucceed;
+  let sync;
 
   try {
-    if (!isSucceed) {
-      sendTechnicalFailureEmail(req.body.id, req.body.date);
-    } else if (isSucceed && req.body.data.length) {
-      if (req.body.data[0].transactions.length) {
-        await crudControllers(Transaction).createMany(
-          req.body.data[0].transactions
-        );
-        req.body.data.shift();
-      }
-      if (req.body.data[0].balances) {
-        await crudControllers(Balance).createMany(req.body.data[0].balances);
-        req.body.data.shift();
-      }
+    if (
+      req.body &&
+      req.body.data &&
+      ["succeed", "failed"].includes(req.body.status)
+    ) {
+      isSucceed = req.body.status === "succeed";
+      sync = await crudControllers(Sync).updateOne(req);
     }
 
-    const sync = await crudControllers(Sync).updateOne(req);
-
-    if (!sync.data) {
+    // missing body OR invalid sync status
+    if (!req.body || typeof isSucceed !== "boolean") {
+      console.info("Invalid body or synchronization ID!");
       return res.status(404).json({
         status: "failure",
-        message: "Invalid document ID. PLease, provide valid information!",
+        message:
+          "Invalid body or synchronization ID. PLease, make sure that you have provided proper request structure!",
       });
+    }
+
+    // notify in failed synchronizations
+    if (!isSucceed) {
+      sendTechnicalFailureEmail(req.body.id, req.body.date);
+    }
+
+    // save the
+    if (
+      isSucceed &&
+      req.body.data.length &&
+      req.body.data[0].transactions.length
+    ) {
+      await crudControllers(Transaction).createManyOnly(
+        req.body.data[0].transactions
+      );
+      if (req.body.data[0].transactions.length) {
+        await crudControllers(Balance).createManyOnly(
+          req.body.data[1].balances
+        );
+      }
     }
 
     return res.status(200).json(sync);
