@@ -250,3 +250,60 @@ describe("sync controllers", () => {
     expect(res.statusCode).toEqual(404);
   });
 });
+
+describe("sync controllers - throws error on missing database setup", () => {
+  let api;
+
+  beforeAll(async () => {
+    // start the server
+    api = await request(server);
+  });
+
+  test("Sync #13 - should fail to initialize new synchronization", async () => {
+    // launch sync
+    const res = await api.post("/v1/syncs/init");
+
+    expect(res.statusCode).toEqual(400);
+  });
+
+  // success || Invalid ID
+  test("Sync #14 - should fail to terminate the uninitialized synchronization", async () => {
+    const randomId = `sync_${Date.now()}`;
+
+    // terminate launched sync
+    const res = await api.post("/v1/syncs/terminate").send({
+      id: randomId,
+      status: "succeed",
+      date: "2021-08-23T08:21:31.287Z",
+      data: [
+        {
+          transactions: [
+            {
+              test: null,
+            },
+          ],
+        },
+        {
+          balances: [
+            {
+              amount: 26148,
+              date: "2019-10-05T14:48:00.000Z",
+            },
+            {
+              amount: 41589,
+              date: "2021-10-05T14:48:00.000Z",
+            },
+          ],
+        },
+      ],
+    });
+
+    expect(res.statusCode).toEqual(400);
+  });
+
+  test("Sync #15 - should fail to remove synchronizations", async () => {
+    const res = await api.delete("/v1/syncs");
+
+    expect(res.statusCode).toEqual(400);
+  });
+});

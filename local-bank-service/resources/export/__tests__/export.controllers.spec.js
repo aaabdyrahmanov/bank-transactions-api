@@ -95,3 +95,30 @@ describe("export controllers", () => {
     expect(res.body.status).toEqual("failure");
   });
 });
+
+describe("export controllers - throws error on missing database setup", () => {
+  let api;
+
+  beforeAll(async () => {
+    // start the server
+    api = await request(server);
+  });
+
+  test("Export Transaction #6 - should fail to export transactions data", async () => {
+    // export transactions data
+    const res = await api.get("/v1/export/transactions");
+
+    expect(res.statusCode).toEqual(400);
+    expect(res.body.status).toEqual("failure");
+    expect(res.body.message).toBeDefined();
+  });
+
+  test("Export Balance #7 - should fail to export balances data", async () => {
+    // export balances data
+    const res = await api.get("/v1/export/balances");
+
+    expect(res.statusCode).toEqual(400);
+    expect(res.body.status).toEqual("failure");
+    expect(res.body.message).toBeDefined();
+  });
+});

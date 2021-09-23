@@ -104,3 +104,47 @@ describe("transaction controllers", () => {
     expect(res.statusCode).toEqual(404);
   });
 });
+
+describe("transaction controllers - throws error on missing database setup", () => {
+  let api;
+
+  beforeAll(async () => {
+    // start the server
+    api = await request(server);
+  });
+
+  test("Transaction #8 - should fail to create new transactions", async () => {
+    // create new transactions
+    const res = await api.post("/v1/transactions").send({
+      data: [
+        {
+          id: "193e7ab4-9251-43fa-b852-8ea2b652920e",
+          amount: 29245,
+          counterpart_name: "Counterpart Name_1",
+          counterpart_iban: "5a706a69-1fb9-4856-9649-17378ba23b68",
+          date: "2020-10-19T20:28:10.000Z",
+        },
+      ],
+    });
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body.status).toEqual("failure");
+    expect(res.body.message).toBeDefined();
+  });
+
+  test("Transaction #9 - should fail to get transactions data", async () => {
+    // get transactions
+    const res = await api.get("/v1/transactions");
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body.status).toEqual("failure");
+    expect(res.body.message).toBeDefined();
+  });
+
+  test("Transaction #10 - should fail to remove transactions data", async () => {
+    // remove transactions
+    const res = await api.delete("/v1/transactions");
+
+    expect(res.statusCode).toEqual(400);
+  });
+});
