@@ -87,7 +87,10 @@ const updateOne = (model) => async (req) => {
       {
         id: req.body.id,
       },
-      req.body
+      req.body,
+      {
+        new: true
+      }
     );
 
     return { status: "success", data: updatedDoc };
