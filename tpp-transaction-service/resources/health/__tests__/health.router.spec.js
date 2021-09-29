@@ -1,4 +1,4 @@
-const router = require("../admin.router");
+const router = require("../health.router");
 
 describe("admin router", () => {
   test("has health route", () => {

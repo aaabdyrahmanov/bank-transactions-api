@@ -4,7 +4,8 @@ const cors = require("cors");
 const createError = require("http-errors");
 
 // import API routes
-const adminRouter = require("../resources/admin/admin.router");
+const healthRouter = require("../resources/health/health.router");
+const docsRouter = require("../resources/documentation/docs.router");
 const balancesRouter = require("../resources/balances/balance.router");
 const transactionsRouter = require("../resources/transactions/transaction.router");
 
@@ -25,7 +26,8 @@ app.use(json());
 app.use(urlencoded({ extended: false }));
 
 // attach routes
-app.use("/api/admin", adminRouter);
+app.use("/api", healthRouter);
+app.use("/api", docsRouter);
 app.use("/api/balances", balancesRouter);
 app.use("/api/transactions", transactionsRouter);
 
