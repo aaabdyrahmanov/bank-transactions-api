@@ -21,7 +21,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Go into the local-bank service directory and run test cases
-        run: cd local-bank-service && yarn install && yarn test
+        run: cd ./services/local-bank && yarn install && yarn test
         env:
           AMQP_URL: amqp://localhost:5672
           AMQP_EXCHANGE_NAME: sync.central_bank
@@ -29,4 +29,4 @@ jobs:
           AMQP_ROUTING_KEY: sync_routing_key
 
       - name: Go into the tpp-transaction service directory and run test cases
-        run: cd tpp-transaction-service && yarn install && yarn test
+        run: cd ./services/tpp-transaction && yarn install && yarn test
