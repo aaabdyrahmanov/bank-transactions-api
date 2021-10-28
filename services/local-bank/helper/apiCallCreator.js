@@ -1,8 +1,7 @@
 /**
  * create API call on TPP-banking API
  * @param {object} options - specified operation options
- * @return {Promise<Object>} - Retrieved operation data
- * @throws {Exception} - Promise rejection depending on the fatality status
+ * @returns {object} - Retrieved operation data
  */
 module.exports = function createAPICall({
   url,

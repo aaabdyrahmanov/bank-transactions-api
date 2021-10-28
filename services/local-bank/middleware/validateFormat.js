@@ -7,7 +7,7 @@ const { TPP_SERVICE_URL } = require("../config");
  * @param object req - http request
  * @param object res - http response
  * @param function next - callback function
- * @returns void
+ * @returns void | res
  */
 module.exports = async function validateFormat(req, res, next) {
   const { lastTransactionId, lastDate } = req.query;
@@ -71,11 +71,11 @@ function operationData(
 }
 
 /**
- * check is given date is in ISO format
+ * check whether or not given date is in ISO format
  * YYYY-MM-DDTHH:MN:SS.MSSZ
  *
  * @param {object} options - specified options
- * @return {boolean} status of the date format match
+ * @return {boolean} - status of the date format matching
  */
 function isIsoDate(date) {
   if (!/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}.\d{3}Z/.test(date)) return false;

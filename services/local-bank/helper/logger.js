@@ -2,11 +2,11 @@ const dayjs = require("dayjs");
 const logger = require("../config/logger");
 
 class Logger {
-  static async info(data = {}) {
+  static info(data = {}) {
     logger.info(this.generateMessage(data));
   }
 
-  static async warn(data = {}) {
+  static warn(data = {}) {
     logger.warn(this.generateMessage(data));
   }
 
