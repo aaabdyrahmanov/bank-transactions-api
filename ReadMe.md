@@ -139,5 +139,18 @@ chmod +x run_all_tests
 ### Testing Environment
 Available endpoints for services and their functions included in the [Documentation](https://github.com/aaabdyrahmanov/bank-transactions-api/tree/master/docs) folder. They can be tested using their belonging Postman Collections. [Postman Collection - Local bank](https://documenter.getpostman.com/view/16055227/Tzz8tHfL) OR [Postman Collection - TPP Transaction](https://documenter.getpostman.com/view/16055227/Tzz8tJ7k)
 
+
+## Built With
+* [Express.js](https://expressjs.com/) - The Node.js web application framework
+* [Mongoose](https://mongoosejs.com/) - MongoDB ODM
+* [Amqplib](https://www.npmjs.com/package/amqplib) - An AMQP 0-9-1 (RabbitMQ) library.
+* [Axios](https://www.npmjs.com/package/axios) - Promise based HTTP client for the server
+* [Nodemailer](https://nodemailer.com/about) - Send e-mails from Node.js
+* [Swagger-ui-express](https://www.npmjs.com/package/swagger-ui-express) - Library to serve auto-generated swagger-ui generated API
+* [Winston](https://github.com/winstonjs/winston) - Logging Library
+* [Jest](https://jestjs.io/) - Testing framework
+* [Supertest](https://github.com/visionmedia/supertest) - HTTP assertions
+
+
 ## License
 Distributed under the MIT License. See [`LICENSE`](https://github.com/aaabdyrahmanov/bank-transactions-api/blob/master/LICENSE.md) for more information.
