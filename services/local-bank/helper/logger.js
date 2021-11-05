@@ -1,4 +1,4 @@
-const dayjs = require("dayjs");
+const moment = require("moment-timezone");
 const logger = require("../config/logger");
 
 class Logger {
@@ -16,7 +16,7 @@ class Logger {
 
   static generateMessage(error) {
     const { message } = error;
-    const datetime = dayjs().format("HH:mm:ss DD.MM.YY");
+    const datetime = moment(Date.now()).tz("GMT").format("HH:mm:ss DD.MM.YY");
     let text = message;
 
     if (!text) {
