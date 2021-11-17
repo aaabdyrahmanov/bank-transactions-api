@@ -1,9 +1,14 @@
 {
+  "root": true,
   "env": {
-    "node": true
+    "commonjs": true,
+    "es2021": true
   },
-
-  "extends": ["airbnb", "prettier"],
+  "extends": ["standard", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 12
+  },
+  "plugins": ["prettier"],
   "rules": {
     "eqeqeq": "off",
     "camelcase": "off",
@@ -11,10 +16,5 @@
     "consistent-return": "off",
     "no-console": "off",
     "no-use-before-define": "off"
-  },
-  "settings": {
-    "react": {
-      "version": "latest"
-    }
   }
 }
