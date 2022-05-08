@@ -39,73 +39,41 @@ mv .env.example .env
 
 ## Running the project
 `Project can be executed in the following two ways:`
-#### 1. Running the project with package manager
-Scripts for Installation and development/testing
+#### 1. Using [yarn](https://classic.yarnpkg.com/en/docs/install/#mac-stable)
+Scripts for Installation, development and testing purposes
 ```bash
-# move into the root project folder
-cd bank-transactions-api
+# move into the root project folder and go for the specific service
+cd bank-transactions-api/services/local-bank
 
-# move into the local-bank service folder
-cd ./services/local-bank
-
-# Install the necessary packages
+# Install the necessary packages for the specific service
 yarn install
 
-# Running the project in development mode
+# Run the service in development mode
 yarn run dev
 
-# Running the project in production mode
+# Run the service in production mode
 yarn run start
 
-# Running the test cases in test mode
+# Run test cases
 yarn run test
 
-# Collecting the test coverage information
+# Collect test coverage
 yarn run coverage
-
-# move into the tpp-transaction service folder
-cd ./services/tpp-transaction
-
-# Install the necessary packages
-yarn install
-
-# Running the project in development mode
-yarn run dev
-
-# Running the project in production mode
-yarn run start
-
-# Running the test cases in test mode
-yarn run test
-
-# Collecting the test coverage information
-yarn run coverage
-
-# move into the notification service folder to start the asynchronous notifier
-cd ./notification
-
-# Install the necessary packages
-yarn install
-
-# Running the project in production mode
-yarn run start
 ```
 
-#### 2. Running the project in a container with Docker
-Commands for running the app and getting detailed information on the process.
+#### 2. Using [docker](https://dockr.ly/3wdYnBM) and [docker-compose](https://dockr.ly/3dCq9BD)
+Commands for running and getting the details of the services.
 ```bash
-# Build services
+# Build and run the services
 docker-compose up -d --build
-# list containers
+# List containers
 docker ps
-# list all local images
-sudo docker image ls
-# get the docker-compose logs
+# Get logs
 docker-compose logs
 ```
 
 
-## Running the Tests
+## Running Tests
 
 There are two ways of running the tests on your local machine.
 
