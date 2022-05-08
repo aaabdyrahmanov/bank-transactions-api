@@ -1,6 +1,6 @@
 const router = require("express").Router();
 
-const localBankService = require("./localBankService");
+const localBankService = require("./local-bank.service");
 
 router.use((req, res, next) => {
   console.info({

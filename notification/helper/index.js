@@ -1,4 +1,4 @@
 /**
  * Export helpers
  */
-module.exports.dateFormatter = require("./dateFormatter");
+module.exports.dateFormatter = require("./date-formatter");

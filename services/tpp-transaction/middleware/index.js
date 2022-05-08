@@ -1,4 +1,4 @@
 /**
  * Export middleware
  */
-module.exports.setDocs = require("./setDocs");
+module.exports.setDocs = require("./set-docs");

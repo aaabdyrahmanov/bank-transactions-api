@@ -1,4 +1,4 @@
 /**
  * Export middleware
  */
-module.exports.validateFormat = require("./validateFormat");
+module.exports.validateFormat = require("./validate-format");
